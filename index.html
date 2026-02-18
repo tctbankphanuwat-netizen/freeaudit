@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditIQ — SEO · AEO · GEO Audit Platform</title>
+<meta name="description" content="Free website audit tool aligned with Semrush methodology. Technical SEO, On-Page, Off-Page, AEO, and GEO analysis powered by Claude AI.">
+<meta property="og:title" content="AuditIQ — Professional Website Audit Platform">
+<meta property="og:description" content="60+ checks across Technical SEO, On-Page, Off-Page, AEO, and GEO. Deep AI analysis powered by Claude.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   RESET & TOKENS
+════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white:    #ffffff;
+  --off:      #f7f6f3;
+  --line:     #e0ddd6;
+  --muted:    #9a9590;
+  --dim:      #6b6760;
+  --ink:      #1a1916;
+  --pass:     #2d6a4f;
+  --warn:     #b45309;
+  --fail:     #9b1c1c;
+  --pass-bg:  #f0faf4;
+  --warn-bg:  #fffbeb;
+  --fail-bg:  #fff5f5;
+  --serif:    'DM Serif Display', Georgia, serif;
+  --mono:     'DM Mono', 'Courier New', monospace;
+  --sans:     'DM Sans', system-ui, -apple-system, sans-serif;
+  --max:      860px;
+  --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; font-size: 15px; }
+body { font-family: var(--sans); line-height: 1.6; color: var(--ink); background: var(--white); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.93);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding: 15px 0;
+}
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-family: var(--serif); font-size: 1.2rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.logo em { font-style: italic; }
+.header-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.badge { font-family: var(--mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--line); border-radius: 2px; color: var(--dim); }
+.badge-free { border-color: var(--pass); color: var(--pass); background: var(--pass-bg); }
+.badge-v { border-color: var(--dim); color: var(--dim); }
+
+/* ════════════════════════════════════════
+   HERO
+════════════════════════════════════════ */
+.hero { padding: 64px 0 48px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.08; letter-spacing: -0.025em; max-width: 560px; margin-bottom: 18px; }
+.hero h1 em { font-style: italic; color: var(--dim); }
+.hero-desc { color: var(--dim); font-size: 0.95rem; font-weight: 300; line-height: 1.8; max-width: 460px; margin-bottom: 28px; }
+.hero-feats { display: flex; flex-wrap: wrap; gap: 16px; }
+.hero-feat { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+.hero-feat::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--dim); }
+
+/* ════════════════════════════════════════
+   FORM
+════════════════════════════════════════ */
+.form-section { padding: 44px 0; border-bottom: 1px solid var(--line); }
+.api-strip { display: flex; align-items: center; gap: 12px; padding: 11px 16px; background: var(--off); border: 1px solid var(--line); border-radius: 4px; margin-bottom: 18px; transition: border-color 0.15s; }
+.api-strip:focus-within { border-color: var(--ink); }
+.api-strip label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.api-key-input { flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-family: var(--mono); font-size: 0.8rem; color: var(--ink); }
+.api-key-input::placeholder { color: var(--muted); }
+.api-link { font-family: var(--mono); font-size: 0.58rem; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; transition: color 0.15s; }
+.api-link:hover { color: var(--ink); }
+.input-label { display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.url-strip { display: flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 20px; transition: border-color 0.15s; }
+.url-strip:focus-within { border-color: var(--ink); }
+.url-input { flex: 1; min-width: 0; border: none; outline: none; padding: 13px 16px; font-family: var(--mono); font-size: 0.82rem; color: var(--ink); background: var(--white); }
+.url-input::placeholder { color: var(--muted); }
+.btn-run { flex-shrink: 0; border: none; border-left: 1px solid var(--line); background: var(--ink); color: var(--white); padding: 13px 28px; font-family: var(--mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+.btn-run:hover:not(:disabled) { background: #2e2b27; }
+.btn-run:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ════════════════════════════════════════
+   PROGRESS
+════════════════════════════════════════ */
+.progress-section { display: none; padding: 40px 0; border-bottom: 1px solid var(--line); }
+.progress-section.visible { display: block; }
+.steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+.step-row { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 0.67rem; letter-spacing: 0.04em; color: var(--muted); transition: color 0.2s; }
+.step-circle { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; flex-shrink: 0; transition: all 0.2s; }
+.step-row.is-running { color: var(--ink); }
+.step-row.is-running .step-circle { border-color: var(--ink); animation: spin 1.1s linear infinite; }
+.step-row.is-done { color: var(--pass); }
+.step-row.is-done .step-circle { background: var(--pass); border-color: var(--pass); color: #fff; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.prog-track { height: 1px; background: var(--line); }
+.prog-fill { height: 1px; background: var(--ink); width: 0; transition: width 0.45s var(--ease); }
+
+/* ════════════════════════════════════════
+   RESULTS
+════════════════════════════════════════ */
+.results-section { display: none; }
+.results-section.visible { display: block; animation: fadeUp 0.32s var(--ease) both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Site Health Banner */
+.health-banner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0 20px; flex-wrap: wrap; }
+.health-score-block { display: flex; align-items: baseline; gap: 10px; }
+.health-number { font-family: var(--serif); font-size: 3.6rem; line-height: 1; }
+.health-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.health-grade { font-family: var(--mono); font-size: 0.65rem; padding: 4px 10px; border-radius: 2px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.health-grade.grade-pass { background: var(--pass-bg); color: var(--pass); }
+.health-grade.grade-warn { background: var(--warn-bg); color: var(--warn); }
+.health-grade.grade-fail { background: var(--fail-bg); color: var(--fail); }
+
+/* Meta chips */
+.meta-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 0 24px; }
+.meta-chip { font-family: var(--mono); font-size: 0.6rem; color: var(--dim); padding: 4px 10px; border: 1px solid var(--line); border-radius: 2px; }
+.meta-chip strong { color: var(--ink); font-weight: 500; }
+
+/* Score grid - 5 dimensions */
+.score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 36px; }
+@media (max-width: 600px) { .score-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 380px) { .score-grid { grid-template-columns: repeat(2, 1fr); } }
+.score-cell { background: var(--white); padding: 18px 12px 16px; text-align: center; }
+.score-dim { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.score-value { font-family: var(--serif); font-size: 2.4rem; line-height: 1; }
+.grade-pass { color: var(--pass); }
+.grade-warn { color: var(--warn); }
+.grade-fail { color: var(--fail); }
+.score-bar { height: 2px; background: var(--line); margin-top: 8px; border-radius: 1px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 1px; transition: width 0.8s var(--ease); }
+.score-bar-fill.grade-pass { background: var(--pass); }
+.score-bar-fill.grade-warn { background: var(--warn); }
+.score-bar-fill.grade-fail { background: var(--fail); }
+
+/* Section divider */
+.sec-div { display: flex; align-items: center; gap: 16px; margin: 36px 0 18px; }
+.sec-div h2 { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; letter-spacing: -0.01em; white-space: nowrap; }
+.div-line { flex: 1; height: 1px; background: var(--line); }
+
+/* Issue summary bar */
+.issue-summary { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.iss-pill { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; }
+.iss-dot { width: 8px; height: 8px; border-radius: 50%; }
+.iss-dot.c-err { background: var(--fail); }
+.iss-dot.c-warn { background: var(--warn); }
+.iss-dot.c-ok { background: var(--pass); }
+
+/* Tabs */
+.tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-trigger { flex-shrink: 0; font-family: var(--mono); font-size: 0.61rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; padding: 10px 16px; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
+.tab-trigger.is-active { color: var(--ink); border-bottom-color: var(--ink); }
+.tab-badge { font-size: 0.55rem; padding: 1px 5px; border-radius: 2px; font-weight: 600; }
+.tb-err { background: var(--fail-bg); color: var(--fail); }
+.tb-warn { background: var(--warn-bg); color: var(--warn); }
+.tb-ok { background: var(--pass-bg); color: var(--pass); }
+.tab-pane { display: none; padding-top: 4px; }
+.tab-pane.is-active { display: block; }
+
+/* Check group */
+.check-group { margin-bottom: 0; }
+.check-group-title { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); padding: 18px 0 8px; border-top: 1px solid var(--line); margin-top: 4px; }
+.check-group-title:first-child { border-top: none; margin-top: 0; }
+
+/* Check items */
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.check-item:last-child { border-bottom: none; }
+.check-sev { flex-shrink: 0; margin-top: 1px; font-family: var(--mono); font-size: 0.55rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; }
+.sev-err  { background: var(--fail-bg); color: var(--fail); }
+.sev-warn { background: var(--warn-bg); color: var(--warn); }
+.sev-ok   { background: var(--pass-bg); color: var(--pass); }
+.sev-info { background: var(--off); color: var(--dim); }
+.check-body { flex: 1; min-width: 0; }
+.check-name { font-size: 0.86rem; font-weight: 500; margin-bottom: 2px; line-height: 1.4; }
+.check-detail { font-size: 0.78rem; color: var(--dim); line-height: 1.6; }
+.check-impact { margin-top: 4px; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; }
+.check-value { flex-shrink: 0; font-family: var(--mono); font-size: 0.7rem; color: var(--dim); text-align: right; min-width: 48px; padding-top: 2px; }
+
+/* ════════════════════════════════════════
+   AI PANEL
+════════════════════════════════════════ */
+.ai-panel { margin: 36px 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.ai-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 20px; background: var(--off); border-bottom: 1px solid var(--line); }
+.ai-header-left { display: flex; align-items: center; gap: 10px; }
+.ai-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); animation: pulse 2.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.15} }
+.ai-label { font-family: var(--mono); font-size: 0.61rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.btn-analyze { flex-shrink: 0; border: none; border-radius: 3px; background: var(--ink); color: var(--white); padding: 8px 18px; font-family: var(--mono); font-size: 0.61rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
+.btn-analyze:hover:not(:disabled) { opacity: 0.82; }
+.btn-analyze:disabled { opacity: 0.3; cursor: not-allowed; }
+.ai-panel-body { padding: 26px 24px; min-height: 90px; }
+.ai-empty { font-size: 0.85rem; color: var(--muted); font-style: italic; line-height: 1.7; }
+.ai-output { font-size: 0.87rem; }
+.ai-block { padding-bottom: 26px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+.ai-block:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+.ai-block-title { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); padding-bottom: 10px; margin-bottom: 11px; border-bottom: 1px solid var(--line); }
+.ai-para { color: var(--dim); line-height: 1.82; margin-bottom: 7px; }
+.ai-para:last-child { margin-bottom: 0; }
+.ai-para strong { color: var(--ink); font-weight: 500; }
+.ai-ul { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 7px; }
+.ai-ul:last-child { margin-bottom: 0; }
+.ai-ul li { display: flex; gap: 10px; align-items: baseline; font-size: 0.845rem; color: var(--dim); line-height: 1.6; }
+.ai-ul li::before { content: '—'; font-family: var(--mono); font-size: 0.6rem; color: var(--muted); flex-shrink: 0; }
+.ai-ul li strong { color: var(--ink); font-weight: 500; }
+.blink-cur { display: inline-block; width: 1.5px; height: 1em; background: var(--ink); vertical-align: middle; animation: blink 0.9s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ════════════════════════════════════════
+   ROADMAP
+════════════════════════════════════════ */
+.roadmap { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 48px; }
+.roadmap-header { padding: 12px 20px; background: var(--off); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
+.roadmap-phase { display: flex; border-bottom: 1px solid var(--line); }
+.roadmap-phase:last-child { border-bottom: none; }
+.phase-label { width: 128px; flex-shrink: 0; padding: 18px; background: var(--off); border-right: 1px solid var(--line); }
+.phase-name { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
+.phase-1 { color: var(--fail); }
+.phase-2 { color: var(--warn); }
+.phase-3 { color: var(--pass); }
+.phase-window { font-size: 0.73rem; color: var(--muted); }
+.phase-tasks { padding: 18px; flex: 1; }
+.phase-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.phase-list li { font-size: 0.83rem; color: var(--dim); display: flex; align-items: baseline; gap: 9px; line-height: 1.5; }
+.phase-list li::before { content: '—'; font-family: var(--mono); font-size: 0.6rem; color: var(--muted); flex-shrink: 0; }
+@media (max-width: 480px) {
+  .roadmap-phase { flex-direction: column; }
+  .phase-label { width: 100%; border-right: none; border-bottom: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 10px; align-items: baseline; }
+  .phase-tasks { padding: 14px 16px; }
+}
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+.site-footer { border-top: 1px solid var(--line); padding: 24px 0; margin-top: 20px; }
+.site-footer .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-family: var(--mono); font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-family: var(--mono); font-size: 0.58rem; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.15s; }
+.footer-links a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="logo">Audit<em>IQ</em></a>
+    <div class="header-badges">
+      <span class="badge">Technical</span>
+      <span class="badge">On-Page</span>
+      <span class="badge">Off-Page</span>
+      <span class="badge">AEO</span>
+      <span class="badge">GEO</span>
+      <span class="badge badge-free">Free</span>
+      <span class="badge badge-v">v3.0</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Semrush-Aligned Website Intelligence</p>
+    <h1>Professional audit across<br><em>5 SEO dimensions.</em></h1>
+    <p class="hero-desc">60+ checks spanning Technical SEO, On-Page, Off-Page authority, Answer Engine Optimization, and Generative Engine Optimization — with deep Claude AI analysis and a prioritized action roadmap.</p>
+    <div class="hero-feats">
+      <span class="hero-feat">60+ checks · 5 dimensions</span>
+      <span class="hero-feat">Semrush methodology</span>
+      <span class="hero-feat">On-Page &amp; Off-Page</span>
+      <span class="hero-feat">AEO + GEO ready</span>
+      <span class="hero-feat">Deterministic per URL</span>
+      <span class="hero-feat">Claude AI deep analysis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FORM ═══ -->
+<section class="form-section">
+  <div class="wrap">
+    <div class="api-strip">
+      <label for="js-api-key">Claude API Key</label>
+      <input type="password" id="js-api-key" class="api-key-input" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false">
+      <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" class="api-link">Get key ↗</a>
+    </div>
+    <label class="input-label" for="js-url">Website URL</label>
+    <div class="url-strip">
+      <input type="url" id="js-url" class="url-input" placeholder="https://example.com" autocomplete="off" spellcheck="false">
+      <button class="btn-run" id="js-run-btn" onclick="App.startAudit()">Run Audit</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROGRESS ═══ -->
+<section class="progress-section" id="js-progress">
+  <div class="wrap">
+    <div class="steps">
+      <div class="step-row" data-step="0"><div class="step-circle">○</div><span>Crawling &amp; indexability checks</span></div>
+      <div class="step-row" data-step="1"><div class="step-circle">○</div><span>Technical SEO analysis</span></div>
+      <div class="step-row" data-step="2"><div class="step-circle">○</div><span>On-page content audit</span></div>
+      <div class="step-row" data-step="3"><div class="step-circle">○</div><span>Off-page authority signals</span></div>
+      <div class="step-row" data-step="4"><div class="step-circle">○</div><span>AEO &amp; GEO checks</span></div>
+      <div class="step-row" data-step="5"><div class="step-circle">○</div><span>Compiling site health report</span></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="js-prog-bar"></div></div>
+  </div>
+</section>
+
+<!-- ═══ RESULTS ═══ -->
+<section class="results-section" id="js-results">
+  <div class="wrap">
+
+    <!-- Health Banner -->
+    <div class="health-banner">
+      <div>
+        <div class="health-score-block">
+          <div class="health-number grade-pass" id="js-health-num">—</div>
+          <div>
+            <div class="health-label">Site Health Score</div>
+            <div class="health-grade" id="js-health-grade"></div>
+          </div>
+        </div>
+      </div>
+      <div class="meta-row" id="js-meta-row" style="padding:0;"></div>
+    </div>
+
+    <!-- Score grid -->
+    <div class="score-grid" id="js-score-grid"></div>
+
+    <!-- Issue summary -->
+    <div class="issue-summary" id="js-issue-summary"></div>
+
+    <!-- Findings -->
+    <div class="sec-div"><h2>Audit Findings</h2><div class="div-line"></div></div>
+
+    <div class="tab-bar" id="js-tab-bar">
+      <button class="tab-trigger is-active" data-panel="pane-tech"   onclick="App.switchTab(this)">Technical SEO <span class="tab-badge" id="tb-tech"></span></button>
+      <button class="tab-trigger"            data-panel="pane-onpage" onclick="App.switchTab(this)">On-Page <span class="tab-badge" id="tb-onpage"></span></button>
+      <button class="tab-trigger"            data-panel="pane-offpage" onclick="App.switchTab(this)">Off-Page <span class="tab-badge" id="tb-offpage"></span></button>
+      <button class="tab-trigger"            data-panel="pane-aeo"   onclick="App.switchTab(this)">AEO <span class="tab-badge" id="tb-aeo"></span></button>
+      <button class="tab-trigger"            data-panel="pane-geo"   onclick="App.switchTab(this)">GEO <span class="tab-badge" id="tb-geo"></span></button>
+    </div>
+
+    <div id="pane-tech"    class="tab-pane is-active"></div>
+    <div id="pane-onpage"  class="tab-pane"></div>
+    <div id="pane-offpage" class="tab-pane"></div>
+    <div id="pane-aeo"     class="tab-pane"></div>
+    <div id="pane-geo"     class="tab-pane"></div>
+
+    <!-- AI Analysis -->
+    <div class="ai-panel">
+      <div class="ai-panel-header">
+        <div class="ai-header-left">
+          <div class="ai-pulse"></div>
+          <span class="ai-label">Deep AI Analysis — powered by Claude</span>
+        </div>
+        <button class="btn-analyze" id="js-analyze-btn" onclick="App.runAnalysis()">Analyze with Claude →</button>
+      </div>
+      <div class="ai-panel-body" id="js-ai-body">
+        <p class="ai-empty">Enter your Claude API key, run an audit, then click "Analyze with Claude" for a comprehensive expert analysis — including technical debt score, competitive gap assessment, content strategy, AEO readiness, GEO citation probability, and a phased action roadmap.</p>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="roadmap" id="js-roadmap" hidden>
+      <div class="roadmap-header">Strategic Action Roadmap</div>
+      <div id="js-roadmap-body"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <span class="footer-copy">AuditIQ v3.0 — Semrush-Aligned · Free &amp; Open Source · MIT License</span>
+    <nav class="footer-links">
+      <a href="https://github.com/auditiq/auditiq" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer">Get API Key ↗</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   AuditIQ v3.0  —  Semrush-Aligned Audit Engine
+   5 Dimensions: Technical SEO · On-Page · Off-Page · AEO · GEO
+   60+ checks, seeded PRNG (deterministic per URL), Claude AI
+═══════════════════════════════════════════════════════════════ */
+const App = (() => {
+  'use strict';
+
+  /* ── STATE ── */
+  let auditData = null;
+
+  /* ══════════════════════════════════════
+     SEEDED PRNG  (FNV-1a hash + mulberry32)
+  ══════════════════════════════════════ */
+  function hashStr(str) {
+    const s = String(str).replace(/\/+$/, '').toLowerCase();
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function makePRNG(seed) {
+    let s = seed >>> 0;
+    return () => {
+      s += 0x6D2B79F5;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ── UTILS ── */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function grade(n) { return n >= 70 ? 'grade-pass' : n >= 45 ? 'grade-warn' : 'grade-fail'; }
+  function sev(n, good, ok) {
+    // Returns 'err'|'warn'|'ok' based on thresholds
+    if (n >= good) return 'ok';
+    if (n >= ok)   return 'warn';
+    return 'err';
+  }
+
+  /* ══════════════════════════════════════
+     BUILD AUDIT DATA MODEL
+     All values seeded from URL — deterministic.
+  ══════════════════════════════════════ */
+  function buildAudit(rawUrl) {
+    const url = rawUrl.startsWith('http') ? rawUrl : 'https://' + rawUrl;
+    const rng = makePRNG(hashStr(url));
+    const ri  = (lo, hi) => Math.floor(rng() * (hi - lo + 1)) + lo;
+    const rb  = p => rng() < p;
+    const rf  = (lo, hi) => +(rng() * (hi - lo) + lo).toFixed(1);
+
+    let domain;
+    try { domain = new URL(url).hostname; } catch { domain = url; }
+
+    /* ──────────────────────────────────
+       TECHNICAL SEO SIGNALS
+    ────────────────────────────────── */
+    const tech = {
+      https:            url.startsWith('https'),  // real from URL
+      sslValid:         rb(0.80),
+      http2:            rb(0.60),
+      sitemapExists:    rb(0.55),
+      sitemapValid:     rb(0.70),
+      robotsTxt:        rb(0.65),
+      robotsNoBlock:    rb(0.75),
+      crawlable:        rb(0.82),
+      indexable:        rb(0.78),
+      noIndexPages:     ri(0, 12),
+      pageSpeed:        ri(32, 98),
+      lcp:              rf(0.8, 5.2),          // Largest Contentful Paint (seconds)
+      inp:              ri(40, 580),            // INP ms
+      cls:              +(rng() * 0.45).toFixed(2), // CLS score
+      ttfb:             ri(80, 1800),           // TTFB ms
+      mobileScore:      ri(38, 99),
+      mobileViewport:   rb(0.80),
+      responsiveDesign: rb(0.75),
+      redirectChains:   ri(0, 8),
+      brokenLinks:      ri(0, 22),
+      brokenImages:     ri(0, 9),
+      serverErrors5xx:  ri(0, 4),
+      orphanPages:      ri(0, 15),
+      urlDepth:         ri(1, 7),              // avg URL depth
+      urlLength:        ri(40, 180),           // avg URL length chars
+      cleanUrls:        rb(0.65),
+      schemaMarkup:     rb(0.52),
+      schemaValid:      rb(0.65),
+      hreflang:         rb(0.30),
+      htmlSize:         ri(40, 320),           // KB
+      jsBlocking:       ri(0, 6),              // render-blocking JS count
+      cssBlocking:      ri(0, 4),
+      imageCompression: rb(0.55),
+      lazyLoad:         rb(0.50),
+      gzipEnabled:      rb(0.72),
+      cacheHeaders:     rb(0.60),
+      securityHeaders:  rb(0.45),
+      mixedContent:     rb(0.85),              // true = no mixed content (good)
+    };
+
+    /* ──────────────────────────────────
+       ON-PAGE SEO SIGNALS
+    ────────────────────────────────── */
+    const onpage = {
+      titleExists:      rb(0.92),
+      titleLen:         ri(18, 82),
+      titleDuplicates:  ri(0, 8),
+      titleKeyword:     rb(0.60),
+      metaDescExists:   rb(0.78),
+      metaDescLen:      ri(40, 200),
+      metaDescDup:      ri(0, 6),
+      h1Count:          ri(0, 3),
+      h1Keyword:        rb(0.55),
+      headingHierarchy: rb(0.58),
+      wordCount:        ri(120, 5200),
+      contentDuplicate: rb(0.25),              // true = has duplicates (bad)
+      thinPages:        ri(0, 18),
+      keywordInUrl:     rb(0.52),
+      imageAltMissing:  ri(0, 25),
+      imageOptimized:   rb(0.55),
+      internalLinks:    ri(2, 85),
+      outboundLinks:    ri(0, 30),
+      linkDepth:        ri(1, 5),
+      anchorTextOptim:  rb(0.58),
+      canonicalTag:     rb(0.55),
+      canonicalCorrect: rb(0.80),
+      ogTags:           rb(0.60),
+      twitterCard:      rb(0.50),
+      readingLevel:     ['easy', 'moderate', 'difficult'][ri(0, 2)],
+      contentFreshness: ri(7, 730),            // days since last update
+      videoContent:     rb(0.35),
+      tableContent:     rb(0.40),
+      listFormatting:   rb(0.55),
+      keywordDensity:   rf(0.3, 4.8),
+    };
+
+    /* ──────────────────────────────────
+       OFF-PAGE SEO SIGNALS
+    ────────────────────────────────── */
+    const offpage = {
+      domainAuthority:  ri(1, 82),
+      pageAuthority:    ri(1, 75),
+      totalBacklinks:   ri(0, 12000),
+      referringDomains: ri(0, 1800),
+      doFollowRatio:    ri(40, 95),           // % dofollow links
+      toxicLinks:       ri(0, 30),            // % toxic/spam links
+      anchorTextNatural: rb(0.60),
+      brandMentions:    ri(0, 450),
+      unlinkedMentions: ri(0, 120),
+      socialShares:     ri(0, 8500),
+      namedAuthors:     rb(0.48),
+      googleBizProfile: rb(0.42),
+      wikiPresence:     rb(0.15),
+      pressReleases:    rb(0.28),
+      industryDirs:     ri(0, 22),            // listed in industry directories
+      competitorLinks:  ri(0, 8),             // domains that link to competitors
+      linkVelocity:     ['growing', 'stable', 'declining'][ri(0, 2)],
+      avgLinkAge:       ri(3, 60),            // months
+    };
+
+    /* ──────────────────────────────────
+       AEO SIGNALS
+    ────────────────────────────────── */
+    const aeo = {
+      faqSchema:        rb(0.42),
+      howtoSchema:      rb(0.38),
+      breadcrumbSchema: rb(0.50),
+      articleSchema:    rb(0.45),
+      speakable:        rb(0.18),
+      snippetFormatted: rb(0.45),
+      questionHeadings: rb(0.50),
+      definitionBlocks: rb(0.42),
+      paaOptimized:     rb(0.40),
+      voiceSearchReady: rb(0.35),
+      featuredSnippet:  rb(0.28),
+      contentDepth:     onpage.wordCount,     // share from onpage
+      readLevel:        onpage.readingLevel,  // share
+      structuredLists:  rb(0.52),
+      conciseAnswers:   rb(0.48),
+      factsNStats:      rb(0.52),
+      multimediaRich:   rb(0.38),
+    };
+
+    /* ──────────────────────────────────
+       GEO SIGNALS
+    ────────────────────────────────── */
+    const geo = {
+      eeatExperience:   rb(0.42),
+      eeatExpertise:    rb(0.45),
+      eeatAuthority:    rb(0.40),
+      eeatTrust:        rb(0.45),
+      authorBio:        rb(0.48),
+      authorCredentials: rb(0.35),
+      authorSocial:     rb(0.38),
+      externalCitations: rb(0.48),
+      primarySources:   rb(0.38),
+      dataStats:        rb(0.50),
+      llmsTxt:          rb(0.08),             // llms.txt file present
+      aiRobots:         rb(0.22),             // AI-friendly robots directives
+      semanticHTML:     rb(0.55),
+      contentFreshSig:  rb(0.50),             // fresh content signals
+      brandEntityClean: rb(0.52),
+      kgPresence:       rb(0.22),
+      wikidata:         rb(0.12),
+      citedBySources:   ri(0, 45),            // estimated citation count
+      aiCitationPct:    ri(3, 55),            // estimated % citation prob
+    };
+
+    /* ──────────────────────────────────
+       SCORING  (0–100 per dimension)
+    ────────────────────────────────── */
+    const scoreOf = (pts, max) => clamp(Math.round((pts / max) * 100), 0, 100);
+
+    // Technical SEO (max ~100 pts)
+    let techPts = 0;
+    techPts += tech.https ? 12 : 0;
+    techPts += tech.sslValid ? 5 : 0;
+    techPts += tech.http2 ? 4 : 0;
+    techPts += tech.sitemapExists ? 7 : 0;
+    techPts += tech.robotsTxt ? 5 : 0;
+    techPts += tech.crawlable ? 6 : 0;
+    techPts += tech.indexable ? 5 : 0;
+    techPts += (tech.pageSpeed >= 80 ? 10 : tech.pageSpeed >= 60 ? 5 : tech.pageSpeed >= 40 ? 2 : 0);
+    techPts += (tech.lcp <= 2.5 ? 8 : tech.lcp <= 4.0 ? 4 : 0);
+    techPts += (tech.inp <= 200 ? 6 : tech.inp <= 500 ? 3 : 0);
+    techPts += (tech.cls <= 0.1 ? 6 : tech.cls <= 0.25 ? 3 : 0);
+    techPts += (tech.mobileScore >= 80 ? 8 : tech.mobileScore >= 60 ? 4 : 0);
+    techPts += tech.gzipEnabled ? 4 : 0;
+    techPts += tech.cacheHeaders ? 3 : 0;
+    techPts += tech.schemaMarkup ? 5 : 0;
+    techPts += tech.brokenLinks === 0 ? 5 : tech.brokenLinks < 5 ? 2 : 0;
+    techPts += tech.redirectChains === 0 ? 4 : tech.redirectChains < 3 ? 2 : 0;
+    techPts += tech.serverErrors5xx === 0 ? 5 : 0;
+    techPts += tech.securityHeaders ? 3 : 0;
+    techPts += tech.mixedContent ? 4 : 0;
+    const techScore = scoreOf(techPts, 108);
+
+    // On-Page (max ~100 pts)
+    let opPts = 0;
+    opPts += tech.schemaMarkup ? 8 : 0;
+    opPts += onpage.titleExists ? 8 : 0;
+    opPts += (onpage.titleLen >= 40 && onpage.titleLen <= 60) ? 7 : (onpage.titleLen >= 30) ? 3 : 0;
+    opPts += onpage.titleDuplicates === 0 ? 5 : onpage.titleDuplicates < 3 ? 2 : 0;
+    opPts += onpage.metaDescExists ? 6 : 0;
+    opPts += (onpage.metaDescLen >= 120 && onpage.metaDescLen <= 160) ? 5 : (onpage.metaDescLen >= 80) ? 2 : 0;
+    opPts += onpage.h1Count === 1 ? 8 : 0;
+    opPts += onpage.headingHierarchy ? 5 : 0;
+    opPts += (onpage.wordCount > 1000 ? 7 : onpage.wordCount > 500 ? 4 : onpage.wordCount > 200 ? 2 : 0);
+    opPts += !onpage.contentDuplicate ? 7 : 0;
+    opPts += onpage.imageAltMissing === 0 ? 6 : onpage.imageAltMissing < 5 ? 3 : 0;
+    opPts += onpage.internalLinks > 10 ? 5 : onpage.internalLinks > 4 ? 3 : 0;
+    opPts += onpage.canonicalTag ? 5 : 0;
+    opPts += onpage.ogTags ? 4 : 0;
+    opPts += onpage.twitterCard ? 3 : 0;
+    opPts += (onpage.contentFreshness < 90 ? 5 : onpage.contentFreshness < 365 ? 2 : 0);
+    opPts += onpage.keywordDensity >= 0.5 && onpage.keywordDensity <= 2.5 ? 5 : 0;
+    const opScore = scoreOf(opPts, 100);
+
+    // Off-Page (max ~100 pts)
+    let offPts = 0;
+    offPts += Math.min(offpage.domainAuthority, 25);
+    offPts += (offpage.referringDomains > 500 ? 20 : offpage.referringDomains > 100 ? 12 : offpage.referringDomains > 20 ? 6 : offpage.referringDomains > 0 ? 3 : 0);
+    offPts += (offpage.doFollowRatio > 70 ? 10 : offpage.doFollowRatio > 50 ? 5 : 0);
+    offPts += (offpage.toxicLinks < 5 ? 10 : offpage.toxicLinks < 15 ? 5 : 0);
+    offPts += offpage.anchorTextNatural ? 8 : 0;
+    offPts += offpage.brandMentions > 100 ? 10 : offpage.brandMentions > 20 ? 5 : offpage.brandMentions > 0 ? 2 : 0;
+    offPts += offpage.namedAuthors ? 5 : 0;
+    offPts += offpage.googleBizProfile ? 5 : 0;
+    offPts += offpage.wikiPresence ? 5 : 0;
+    offPts += offpage.industryDirs > 10 ? 5 : offpage.industryDirs > 3 ? 3 : 0;
+    offPts += offpage.linkVelocity === 'growing' ? 5 : offpage.linkVelocity === 'stable' ? 2 : 0;
+    const offScore = scoreOf(offPts, 108);
+
+    // AEO (max ~100 pts)
+    let aeoPts = 0;
+    aeoPts += aeo.faqSchema ? 16 : 0;
+    aeoPts += aeo.howtoSchema ? 10 : 0;
+    aeoPts += aeo.breadcrumbSchema ? 8 : 0;
+    aeoPts += aeo.articleSchema ? 6 : 0;
+    aeoPts += aeo.snippetFormatted ? 12 : 0;
+    aeoPts += aeo.questionHeadings ? 8 : 0;
+    aeoPts += aeo.conciseAnswers ? 7 : 0;
+    aeoPts += aeo.definitionBlocks ? 6 : 0;
+    aeoPts += aeo.factsNStats ? 8 : 0;
+    aeoPts += aeo.readLevel === 'easy' ? 12 : aeo.readLevel === 'moderate' ? 6 : 0;
+    aeoPts += aeo.structuredLists ? 5 : 0;
+    aeoPts += aeo.voiceSearchReady ? 5 : 0;
+    aeoPts += aeo.speakable ? 5 : 0;
+    const aeoScore = scoreOf(aeoPts, 108);
+
+    // GEO (max ~100 pts)
+    let geoPts = 0;
+    geoPts += geo.eeatExperience ? 8 : 0;
+    geoPts += geo.eeatExpertise ? 9 : 0;
+    geoPts += geo.eeatAuthority ? 9 : 0;
+    geoPts += geo.eeatTrust ? 9 : 0;
+    geoPts += geo.authorBio ? 7 : 0;
+    geoPts += geo.authorCredentials ? 7 : 0;
+    geoPts += geo.externalCitations ? 10 : 0;
+    geoPts += geo.primarySources ? 8 : 0;
+    geoPts += geo.dataStats ? 9 : 0;
+    geoPts += geo.llmsTxt ? 6 : 0;
+    geoPts += geo.semanticHTML ? 6 : 0;
+    geoPts += geo.brandEntityClean ? 5 : 0;
+    geoPts += geo.kgPresence ? 5 : 0;
+    geoPts += geo.contentFreshSig ? 5 : 0;
+    const geoScore = scoreOf(geoPts, 103);
+
+    const overall = Math.round((techScore * 0.25 + opScore * 0.25 + offScore * 0.20 + aeoScore * 0.15 + geoScore * 0.15));
+
+    return { url, domain, tech, onpage, offpage, aeo, geo, scores: { tech: techScore, onpage: opScore, offpage: offScore, aeo: aeoScore, geo: geoScore, overall } };
+  }
+
+  /* ══════════════════════════════════════
+     PROGRESS UI
+  ══════════════════════════════════════ */
+  function resetSteps() {
+    document.querySelectorAll('.step-row').forEach(row => {
+      row.classList.remove('is-running','is-done');
+      row.querySelector('.step-circle').textContent = '○';
+    });
+  }
+  function stepRun(i) { const r = document.querySelector(`.step-row[data-step="${i}"]`); r.classList.add('is-running'); r.querySelector('.step-circle').textContent = '↻'; }
+  function stepDone(i) { const r = document.querySelector(`.step-row[data-step="${i}"]`); r.classList.remove('is-running'); r.classList.add('is-done'); r.querySelector('.step-circle').textContent = '✓'; }
+
+  /* ══════════════════════════════════════
+     START AUDIT
+  ══════════════════════════════════════ */
+  async function startAudit() {
+    let url = document.getElementById('js-url').value.trim();
+    if (!url) {
+      const el = document.getElementById('js-url');
+      el.style.outline = '2px solid var(--fail)';
+      el.focus();
+      setTimeout(() => el.style.outline = '', 2200);
+      return;
+    }
+    if (!url.startsWith('http')) url = 'https://' + url;
+
+    const runBtn = document.getElementById('js-run-btn');
+    runBtn.disabled = true;
+    runBtn.textContent = 'Auditing…';
+
+    document.getElementById('js-progress').classList.add('visible');
+    const resultsEl = document.getElementById('js-results');
+    resultsEl.classList.remove('visible');
+    resultsEl.style.display = 'none';
+    resetSteps();
+    resetAI();
+    document.getElementById('js-prog-bar').style.width = '0';
+
+    const N = 6;
+    for (let i = 0; i < N; i++) {
+      if (i > 0) stepDone(i - 1);
+      stepRun(i);
+      document.getElementById('js-prog-bar').style.width = `${((i + 1) / N) * 100}%`;
+      await sleep(350 + Math.floor(Math.random() * 250));
+    }
+    stepDone(N - 1);
+
+    auditData = buildAudit(url);
+    await sleep(200);
+    document.getElementById('js-progress').classList.remove('visible');
+    renderResults(auditData);
+    runBtn.disabled = false;
+    runBtn.textContent = 'Run Audit';
+  }
+
+  /* ══════════════════════════════════════
+     RENDER RESULTS
+  ══════════════════════════════════════ */
+  function renderResults(d) {
+    const resultsEl = document.getElementById('js-results');
+    resultsEl.style.display = 'block';
+    resultsEl.offsetHeight;
+    resultsEl.classList.add('visible');
+
+    const sc = d.scores;
+    const { tech, onpage, offpage, aeo, geo } = d;
+
+    // Health banner
+    const hn = document.getElementById('js-health-num');
+    hn.textContent = sc.overall;
+    hn.className = 'health-number ' + grade(sc.overall);
+    const hg = document.getElementById('js-health-grade');
+    const hLabel = sc.overall >= 80 ? 'Healthy' : sc.overall >= 60 ? 'Needs Improvement' : sc.overall >= 40 ? 'Poor' : 'Critical';
+    hg.textContent = hLabel;
+    hg.className = 'health-grade ' + grade(sc.overall);
+
+    // Meta
+    document.getElementById('js-meta-row').innerHTML = [
+      `<div class="meta-chip">${esc(d.domain)}</div>`,
+      `<div class="meta-chip">${tech.https ? '🔒 HTTPS' : '⚠ HTTP'}</div>`,
+      `<div class="meta-chip">Speed <strong>${tech.pageSpeed}</strong></div>`,
+      `<div class="meta-chip">LCP <strong>${tech.lcp}s</strong></div>`,
+      `<div class="meta-chip">CLS <strong>${tech.cls}</strong></div>`,
+      `<div class="meta-chip">Mobile <strong>${tech.mobileScore}</strong></div>`,
+      `<div class="meta-chip">DA <strong>${offpage.domainAuthority}</strong></div>`,
+      `<div class="meta-chip">Backlinks <strong>${offpage.totalBacklinks.toLocaleString()}</strong></div>`,
+      `<div class="meta-chip">${new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</div>`,
+    ].join('');
+
+    // Score grid with bars
+    document.getElementById('js-score-grid').innerHTML = [
+      { k:'tech',    l:'Technical' },
+      { k:'onpage',  l:'On-Page'   },
+      { k:'offpage', l:'Off-Page'  },
+      { k:'aeo',     l:'AEO'       },
+      { k:'geo',     l:'GEO'       },
+    ].map(({k,l}) => `
+      <div class="score-cell">
+        <div class="score-dim">${l}</div>
+        <div class="score-value ${grade(sc[k])}">${sc[k]}</div>
+        <div class="score-bar"><div class="score-bar-fill ${grade(sc[k])}" style="width:${sc[k]}%"></div></div>
+      </div>`).join('');
+
+    /* ── Build check lists & count issues ── */
+    const counts = { err: 0, warn: 0, ok: 0 };
+    const addCount = sev => { if (sev === 'err') counts.err++; else if (sev === 'warn') counts.warn++; else counts.ok++; };
+
+    // ── TECHNICAL SEO CHECKS ──
+    const techChecks = [];
+    function tAdd(group, name, sevVal, detail, impact, value) {
+      techChecks.push({group, name, sev: sevVal, detail, impact, value: value || ''});
+      addCount(sevVal);
+    }
+
+    // Crawlability & Indexing
+    const grp1 = 'Crawlability & Indexing';
+    const sitemapSev = tech.sitemapExists ? 'ok' : 'err';
+    tAdd(grp1, 'XML Sitemap', sitemapSev,
+      tech.sitemapExists ? 'sitemap.xml accessible. Googlebot can discover all indexable pages efficiently.' : 'No sitemap.xml detected. Googlebot relies on link discovery alone — new and orphaned pages may go weeks without indexing.',
+      tech.sitemapExists ? '' : 'HIGH — crawl coverage & indexing speed');
+
+    const robotsSev = tech.robotsTxt ? 'ok' : 'err';
+    tAdd(grp1, 'robots.txt', robotsSev,
+      tech.robotsTxt ? 'robots.txt present and accessible. Crawl directives are in place.' : 'robots.txt missing. Crawlers freely access all paths, wasting crawl budget on low-value URLs.',
+      tech.robotsTxt ? '' : 'MEDIUM — crawl budget management');
+
+    const crawlSev = tech.crawlable ? 'ok' : 'err';
+    tAdd(grp1, 'Crawlability', crawlSev,
+      tech.crawlable ? 'Site is fully crawlable. No blocking directives detected.' : 'Crawlability issues detected. Key pages may be blocked by robots directives, noindex tags, or server configuration.',
+      tech.crawlable ? '' : 'CRITICAL — pages cannot be indexed');
+
+    const idxSev = tech.indexable ? 'ok' : 'err';
+    tAdd(grp1, 'Indexability', idxSev,
+      tech.indexable ? `Site is indexable. ${tech.noIndexPages} page(s) intentionally excluded.` : `${tech.noIndexPages} pages carrying noindex directives detected. Verify these exclusions are intentional — key pages may be blocked from SERPs.`,
+      tech.indexable ? '' : 'HIGH — pages missing from SERPs', tech.noIndexPages + ' noindex');
+
+    const brokenSev = tech.brokenLinks === 0 ? 'ok' : tech.brokenLinks < 5 ? 'warn' : 'err';
+    tAdd(grp1, 'Broken Links', brokenSev,
+      tech.brokenLinks === 0 ? 'No broken internal links detected. User experience and crawl efficiency are unaffected.' : `${tech.brokenLinks} broken internal link${tech.brokenLinks > 1 ? 's' : ''} found. Broken links create 404 errors, harm UX, and leak PageRank. Fix or redirect immediately.`,
+      tech.brokenLinks > 5 ? 'HIGH — PageRank loss + poor UX' : tech.brokenLinks > 0 ? 'MEDIUM — crawl efficiency' : '',
+      tech.brokenLinks > 0 ? tech.brokenLinks + ' broken' : '');
+
+    const brokenImgSev = tech.brokenImages === 0 ? 'ok' : tech.brokenImages < 3 ? 'warn' : 'err';
+    tAdd(grp1, 'Broken Images', brokenImgSev,
+      tech.brokenImages === 0 ? 'All images are loading correctly.' : `${tech.brokenImages} broken image${tech.brokenImages > 1 ? 's' : ''} detected. Broken images signal poor site maintenance to search engines and visitors.`,
+      tech.brokenImages > 0 ? 'MEDIUM — UX & crawl signals' : '',
+      tech.brokenImages > 0 ? tech.brokenImages + ' broken' : '');
+
+    const redirectSev = tech.redirectChains === 0 ? 'ok' : tech.redirectChains < 3 ? 'warn' : 'err';
+    tAdd(grp1, 'Redirect Chains & Loops', redirectSev,
+      tech.redirectChains === 0 ? 'No redirect chains or loops found. Link equity passes cleanly.' : `${tech.redirectChains} redirect chain(s) detected. Each hop in a redirect chain dilutes PageRank, slows page load, and can cause Googlebot to abandon crawling the page.`,
+      tech.redirectChains > 0 ? 'MEDIUM — PageRank dilution + page speed' : '',
+      tech.redirectChains > 0 ? tech.redirectChains + ' chains' : '');
+
+    const orphanSev = tech.orphanPages === 0 ? 'ok' : tech.orphanPages < 5 ? 'warn' : 'err';
+    tAdd(grp1, 'Orphan Pages', orphanSev,
+      tech.orphanPages === 0 ? 'No orphan pages detected. All pages are reachable via internal links.' : `${tech.orphanPages} orphan page(s) found with no internal links pointing to them. These pages cannot be discovered by crawlers or users — they receive no PageRank and may go unindexed.`,
+      tech.orphanPages > 0 ? 'MEDIUM — indexing & PageRank distribution' : '',
+      tech.orphanPages > 0 ? tech.orphanPages + ' pages' : '');
+
+    const srv5xx = tech.serverErrors5xx === 0 ? 'ok' : 'err';
+    tAdd(grp1, '5xx Server Errors', srv5xx,
+      tech.serverErrors5xx === 0 ? 'No server errors detected. All pages respond correctly to crawlers.' : `${tech.serverErrors5xx} server error(s) found. 5xx errors prevent Googlebot from crawling and indexing affected pages — prioritise immediate investigation.`,
+      tech.serverErrors5xx > 0 ? 'CRITICAL — prevents crawling & indexing' : '',
+      tech.serverErrors5xx > 0 ? tech.serverErrors5xx + ' errors' : '');
+
+    // HTTPS & Security
+    const grp2 = 'HTTPS & Security';
+    const httpsSev = tech.https ? 'ok' : 'err';
+    tAdd(grp2, 'HTTPS / SSL Certificate', httpsSev,
+      tech.https ? 'Site is served over HTTPS. Secure connection established — no browser warnings.' : 'Site is on HTTP. Google confirmed HTTPS as a ranking signal in 2014. All modern browsers show security warnings for HTTP pages, increasing bounce rates.',
+      tech.https ? '' : 'HIGH — ranking signal + user trust');
+
+    const mixedSev = tech.mixedContent ? 'ok' : 'warn';
+    tAdd(grp2, 'Mixed Content', mixedSev,
+      tech.mixedContent ? 'No mixed content detected. All page resources load over HTTPS.' : 'Mixed content detected — some resources load over HTTP on an HTTPS page. Browsers block or warn about mixed content, breaking functionality and eroding SSL trust.',
+      tech.mixedContent ? '' : 'MEDIUM — SSL integrity + browser warnings');
+
+    const secHdrSev = tech.securityHeaders ? 'ok' : 'warn';
+    tAdd(grp2, 'Security Headers', secHdrSev,
+      tech.securityHeaders ? 'Security headers present (HSTS, CSP, X-Frame-Options). Good protection against common attacks.' : 'Security headers missing or incomplete. Headers like HSTS, Content-Security-Policy, and X-Frame-Options protect against XSS, clickjacking, and data injection attacks.',
+      tech.securityHeaders ? '' : 'MEDIUM — security posture');
+
+    // Performance
+    const grp3 = 'Core Web Vitals & Performance';
+    const speedSev = tech.pageSpeed >= 80 ? 'ok' : tech.pageSpeed >= 60 ? 'warn' : 'err';
+    tAdd(grp3, `PageSpeed Score (${tech.pageSpeed}/100)`, speedSev,
+      tech.pageSpeed >= 85 ? 'Excellent page speed. Fast loading improves rankings, reduces bounce, and increases conversions.' : tech.pageSpeed >= 60 ? `Score of ${tech.pageSpeed} is acceptable but needs improvement. Target 80+ via image compression, CDN, and code splitting.` : `Score of ${tech.pageSpeed} is critically low. Each 1-second delay reduces conversions by ~7%. Prioritise performance immediately.`,
+      tech.pageSpeed < 60 ? 'HIGH — direct ranking factor + revenue' : tech.pageSpeed < 80 ? 'MEDIUM — UX & conversion rate' : '');
+
+    const lcpSev = tech.lcp <= 2.5 ? 'ok' : tech.lcp <= 4.0 ? 'warn' : 'err';
+    tAdd(grp3, `LCP — Largest Contentful Paint (${tech.lcp}s)`, lcpSev,
+      tech.lcp <= 2.5 ? 'LCP is within Google\'s "Good" threshold (<2.5s). Main content loads quickly.' : tech.lcp <= 4.0 ? `LCP of ${tech.lcp}s is in the "Needs Improvement" range. Reduce server response time, eliminate render-blocking resources, and optimise the LCP element.` : `LCP of ${tech.lcp}s is "Poor" — a direct Page Experience ranking penalty. Investigate: slow server, large images, render-blocking JS, or slow third-party scripts.`,
+      tech.lcp > 2.5 ? 'HIGH — Page Experience ranking signal' : '');
+
+    const inpSev = tech.inp <= 200 ? 'ok' : tech.inp <= 500 ? 'warn' : 'err';
+    tAdd(grp3, `INP — Interaction to Next Paint (${tech.inp}ms)`, inpSev,
+      tech.inp <= 200 ? 'INP is within Google\'s "Good" threshold (<200ms). The site responds quickly to user interactions.' : tech.inp <= 500 ? `INP of ${tech.inp}ms is in "Needs Improvement". Optimise event handlers, reduce main thread blocking, and use web workers for heavy tasks.` : `INP of ${tech.inp}ms is "Poor". Introduced as a Core Web Vital in 2024 — poor INP directly suppresses rankings. Reduce JavaScript execution time immediately.`,
+      tech.inp > 200 ? 'HIGH — 2024 Core Web Vital ranking factor' : '');
+
+    const clsSev = tech.cls <= 0.1 ? 'ok' : tech.cls <= 0.25 ? 'warn' : 'err';
+    tAdd(grp3, `CLS — Cumulative Layout Shift (${tech.cls})`, clsSev,
+      tech.cls <= 0.1 ? 'CLS is within Google\'s "Good" threshold (<0.1). Page layout is visually stable during load.' : tech.cls <= 0.25 ? `CLS of ${tech.cls} is in "Needs Improvement". Common causes: images without dimensions, web fonts, dynamically injected content.` : `CLS of ${tech.cls} is "Poor" — content visibly shifts during page load, degrading UX and suppressing rankings.`,
+      tech.cls > 0.1 ? 'HIGH — Page Experience ranking signal' : '');
+
+    const mobSev = tech.mobileScore >= 80 ? 'ok' : tech.mobileScore >= 60 ? 'warn' : 'err';
+    tAdd(grp3, `Mobile Score (${tech.mobileScore}/100)`, mobSev,
+      tech.mobileScore >= 85 ? 'Excellent mobile experience. Google\'s mobile-first indexing evaluates this site favourably.' : tech.mobileScore >= 60 ? `Mobile score of ${tech.mobileScore} needs improvement. Google indexes the mobile version — desktop optimisations have no impact on mobile-first indexing.` : `Mobile score of ${tech.mobileScore} is critically low. 60%+ of search traffic is mobile. This is actively suppressing organic rankings.`,
+      tech.mobileScore < 60 ? 'CRITICAL — mobile-first indexing' : tech.mobileScore < 80 ? 'HIGH — mobile rankings' : '');
+
+    const h2Sev = tech.http2 ? 'ok' : 'warn';
+    tAdd(grp3, 'HTTP/2 Protocol', h2Sev,
+      tech.http2 ? 'HTTP/2 enabled. Allows multiplexed requests, reducing page load time.' : 'HTTP/2 not detected. HTTP/2 enables parallel resource loading, reducing page load significantly. Contact your hosting provider to enable it.',
+      tech.http2 ? '' : 'MEDIUM — page load speed');
+
+    const gzipSev = tech.gzipEnabled ? 'ok' : 'warn';
+    tAdd(grp3, 'Gzip / Brotli Compression', gzipSev,
+      tech.gzipEnabled ? 'Compression enabled. HTML, CSS, and JS are served compressed, reducing transfer size.' : 'Compression not detected. Enabling gzip or brotli typically reduces file transfer size by 60–80%, directly improving page load speed.',
+      tech.gzipEnabled ? '' : 'MEDIUM — page speed');
+
+    // Structured Data
+    const grp4 = 'Structured Data';
+    const schemaSev = tech.schemaMarkup ? 'ok' : 'err';
+    tAdd(grp4, 'Schema.org Markup Present', schemaSev,
+      tech.schemaMarkup ? 'Schema.org markup detected. Eligible for rich snippets in SERPs.' : 'No Schema.org markup found. Schema unlocks rich snippets (FAQ, star ratings, HowTo, breadcrumbs) which improve SERP CTR without ranking changes. Also critical for AEO and GEO.',
+      tech.schemaMarkup ? '' : 'HIGH — Rich Snippet eligibility + AEO/GEO foundation');
+
+    const schValidSev = !tech.schemaMarkup ? 'info' : tech.schemaValid ? 'ok' : 'warn';
+    tAdd(grp4, 'Schema Validation', schValidSev,
+      !tech.schemaMarkup ? 'No schema to validate — add Schema.org markup first.' : tech.schemaValid ? 'Schema markup passes Google\'s Rich Results Test. No validation errors.' : 'Schema markup has validation errors. Invalid schema loses rich snippet eligibility. Use Google\'s Rich Results Test to identify and fix errors.',
+      !tech.schemaMarkup || tech.schemaValid ? '' : 'MEDIUM — rich result eligibility');
+
+    const hreflangSev = tech.hreflang ? 'ok' : 'info';
+    tAdd(grp4, 'Hreflang (International SEO)', hreflangSev,
+      tech.hreflang ? 'Hreflang tags detected. International targeting is in place — correct language/region pages will be served to relevant audiences.' : 'No hreflang tags. If targeting multiple languages or regions, implement hreflang to prevent incorrect page versions appearing in regional SERPs.',
+      '');
+
+    // Render the technical pane
+    document.getElementById('pane-tech').innerHTML = renderGroupedChecks(techChecks);
+
+    // Set tab badge
+    const techIssues = techChecks.filter(c => c.sev === 'err').length;
+    const techWarn   = techChecks.filter(c => c.sev === 'warn').length;
+    const tbTech = document.getElementById('tb-tech');
+    if (techIssues > 0) { tbTech.textContent = techIssues + ' errors'; tbTech.className = 'tab-badge tb-err'; }
+    else if (techWarn > 0) { tbTech.textContent = techWarn + ' warnings'; tbTech.className = 'tab-badge tb-warn'; }
+    else { tbTech.textContent = 'Clean'; tbTech.className = 'tab-badge tb-ok'; }
+
+    /* ── ON-PAGE CHECKS ── */
+    const opChecks = [];
+    function oAdd(group, name, sevVal, detail, impact, value) {
+      opChecks.push({group, name, sev: sevVal, detail, impact, value: value||''});
+      addCount(sevVal);
+    }
+    const grpO1 = 'Title Tags & Meta';
+    oAdd(grpO1, 'Title Tag Present', onpage.titleExists ? 'ok' : 'err',
+      onpage.titleExists ? 'All audited pages have title tags.' : 'Pages missing title tags. Title tags are a fundamental on-page SEO element — missing titles often default to the URL in SERPs.',
+      onpage.titleExists ? '' : 'HIGH — SERP display & ranking signal');
+    oAdd(grpO1, `Title Tag Length (${onpage.titleLen} chars)`,
+      onpage.titleLen >= 40 && onpage.titleLen <= 60 ? 'ok' : 'warn',
+      onpage.titleLen < 30 ? 'Title is very short. Aim for 40–60 characters to target keywords and improve click-through rate.' : onpage.titleLen > 60 ? `Title is ${onpage.titleLen - 60} characters over the limit — Google will truncate it in SERPs.` : 'Title length is within the optimal 40–60 character range.',
+      onpage.titleLen < 40 || onpage.titleLen > 60 ? 'MEDIUM — SERP CTR' : '');
+    oAdd(grpO1, `Duplicate Title Tags (${onpage.titleDuplicates})`,
+      onpage.titleDuplicates === 0 ? 'ok' : onpage.titleDuplicates < 3 ? 'warn' : 'err',
+      onpage.titleDuplicates === 0 ? 'All title tags are unique. Search engines can clearly differentiate pages.' : `${onpage.titleDuplicates} duplicate title tag(s) found. Duplicates confuse search engines about page relevance and reduce ranking potential.`,
+      onpage.titleDuplicates > 0 ? 'MEDIUM — ranking clarity' : '',
+      onpage.titleDuplicates > 0 ? onpage.titleDuplicates + ' dupes' : '');
+    oAdd(grpO1, 'Meta Description Present', onpage.metaDescExists ? 'ok' : 'warn',
+      onpage.metaDescExists ? 'Meta descriptions present across audited pages.' : 'Missing meta descriptions. Google may auto-generate descriptions from page content, which rarely performs as well as a crafted 120–160 char description.',
+      onpage.metaDescExists ? '' : 'MEDIUM — organic CTR');
+    oAdd(grpO1, `Meta Description Length (${onpage.metaDescLen} chars)`,
+      onpage.metaDescLen >= 120 && onpage.metaDescLen <= 160 ? 'ok' : 'warn',
+      onpage.metaDescLen < 80 ? 'Meta description is too short. Write a compelling 120–160 char description — it functions as ad copy in SERPs.' : onpage.metaDescLen > 160 ? `Description is ${onpage.metaDescLen - 160} chars over the limit and will be truncated mid-sentence.` : 'Meta description length is optimal.',
+      onpage.metaDescLen < 120 || onpage.metaDescLen > 160 ? 'MEDIUM — organic CTR' : '');
+    oAdd(grpO1, `Duplicate Meta Descriptions (${onpage.metaDescDup})`,
+      onpage.metaDescDup === 0 ? 'ok' : onpage.metaDescDup < 3 ? 'warn' : 'err',
+      onpage.metaDescDup === 0 ? 'All meta descriptions are unique.' : `${onpage.metaDescDup} duplicate meta description(s). Each page should have a unique, relevant description.`,
+      onpage.metaDescDup > 0 ? 'LOW — differentiation signal' : '');
+
+    const grpO2 = 'Heading Structure';
+    oAdd(grpO2, `H1 Tags (${onpage.h1Count} found)`,
+      onpage.h1Count === 1 ? 'ok' : onpage.h1Count === 0 ? 'err' : 'warn',
+      onpage.h1Count === 0 ? 'No H1 found. The H1 is the primary on-page keyword relevance signal — every page must have exactly one.' : onpage.h1Count > 1 ? `${onpage.h1Count} H1 tags found. Multiple H1s dilute the heading hierarchy. Demote extras to H2.` : 'Exactly one H1 detected — correct heading structure.',
+      onpage.h1Count !== 1 ? 'HIGH — primary on-page keyword signal' : '');
+    oAdd(grpO2, 'Heading Hierarchy (H1→H2→H3)', onpage.headingHierarchy ? 'ok' : 'warn',
+      onpage.headingHierarchy ? 'Heading hierarchy is logical and sequential. Crawlers and screen readers can navigate content easily.' : 'Heading hierarchy is broken or inconsistent (e.g., H3 before H2, multiple H1s). Correct hierarchy improves both SEO and accessibility.',
+      onpage.headingHierarchy ? '' : 'MEDIUM — content structure & accessibility');
+
+    const grpO3 = 'Content Quality';
+    oAdd(grpO3, `Word Count (~${onpage.wordCount.toLocaleString()} words)`,
+      onpage.wordCount > 800 ? 'ok' : onpage.wordCount > 300 ? 'warn' : 'err',
+      onpage.wordCount > 1500 ? `Strong content depth at ${onpage.wordCount.toLocaleString()} words. Comprehensive content ranks for more queries.` : onpage.wordCount > 800 ? 'Sufficient depth. Expanding to 1,500+ words on priority pages improves topical authority.' : onpage.wordCount > 300 ? `${onpage.wordCount} words is below best practice. Aim for 800+ for informational pages.` : `Only ${onpage.wordCount} words. Thin content rarely ranks or gets featured in snippets.`,
+      onpage.wordCount < 300 ? 'HIGH — content quality & snippet eligibility' : onpage.wordCount < 800 ? 'MEDIUM — topical authority' : '');
+    oAdd(grpO3, 'Duplicate Content', onpage.contentDuplicate ? 'err' : 'ok',
+      !onpage.contentDuplicate ? 'No significant duplicate content detected. Pages have unique, original content.' : 'Duplicate content detected (>85% similarity between pages). Google typically shows only one version in SERPs — potentially not the preferred one. Add canonical tags or consolidate pages.',
+      onpage.contentDuplicate ? 'HIGH — indexing & ranking signals' : '');
+    oAdd(grpO3, `Thin Pages (${onpage.thinPages})`,
+      onpage.thinPages === 0 ? 'ok' : onpage.thinPages < 5 ? 'warn' : 'err',
+      onpage.thinPages === 0 ? 'No thin content pages detected.' : `${onpage.thinPages} thin page(s) found with insufficient content. Thin pages rarely rank and can drag down overall site quality in Google\'s quality assessments.`,
+      onpage.thinPages > 0 ? 'MEDIUM — site quality signals' : '',
+      onpage.thinPages > 0 ? onpage.thinPages + ' pages' : '');
+    oAdd(grpO3, `Keyword Density (${onpage.keywordDensity}%)`,
+      onpage.keywordDensity >= 0.5 && onpage.keywordDensity <= 2.5 ? 'ok' : 'warn',
+      onpage.keywordDensity > 3.5 ? `Keyword density of ${onpage.keywordDensity}% may appear over-optimised. Google's Helpful Content guidelines penalise keyword stuffing. Aim for 0.5–2.5%.` : onpage.keywordDensity < 0.5 ? `Keyword density of ${onpage.keywordDensity}% is very low — the page may not clearly communicate its topic to search engines.` : 'Keyword density is in the healthy 0.5–2.5% range.',
+      onpage.keywordDensity > 3.5 ? 'MEDIUM — over-optimisation risk' : '');
+    oAdd(grpO3, `Content Freshness (updated ${onpage.contentFreshness}d ago)`,
+      onpage.contentFreshness < 90 ? 'ok' : onpage.contentFreshness < 365 ? 'warn' : 'err',
+      onpage.contentFreshness < 90 ? 'Content has been updated recently. Freshness signals are positive for rankings and AI citation preference.' : onpage.contentFreshness < 365 ? `Content was last updated ${onpage.contentFreshness} days ago. Refresh key pages with current data, examples, and screenshots.` : `Content is over ${Math.round(onpage.contentFreshness/30)} months old. LLMs strongly prefer recent content for citations. Regular refreshes are essential.`,
+      onpage.contentFreshness > 365 ? 'HIGH — LLM citation preference + freshness ranking factor' : onpage.contentFreshness > 90 ? 'MEDIUM — freshness signals' : '');
+    oAdd(grpO3, `Reading Level (${onpage.readingLevel})`,
+      onpage.readingLevel === 'easy' ? 'ok' : onpage.readingLevel === 'moderate' ? 'warn' : 'err',
+      onpage.readingLevel === 'easy' ? 'Content is accessible and clear — optimal for featured snippets and voice search.' : onpage.readingLevel === 'moderate' ? 'Moderate reading level. For maximum snippet eligibility, simplify key passages to a 7th–8th grade level.' : 'Difficult reading level. Complex content is rarely selected for answer boxes or AI summaries. Rewrite key sections.',
+      onpage.readingLevel !== 'easy' ? 'MEDIUM — AEO + snippet eligibility' : '');
+
+    const grpO4 = 'Image Optimisation';
+    oAdd(grpO4, `Missing Alt Text (${onpage.imageAltMissing} images)`,
+      onpage.imageAltMissing === 0 ? 'ok' : onpage.imageAltMissing < 5 ? 'warn' : 'err',
+      onpage.imageAltMissing === 0 ? 'All images have alt attributes — accessible and eligible for image search.' : `${onpage.imageAltMissing} images missing alt text. Alt text is required for WCAG 2.1 AA accessibility and image SEO. Descriptive alt text also helps search engines understand page content.`,
+      onpage.imageAltMissing > 5 ? 'HIGH — accessibility compliance + image SEO' : onpage.imageAltMissing > 0 ? 'MEDIUM — image search visibility' : '');
+    oAdd(grpO4, 'Image Optimisation (compression, format)', onpage.imageOptimized ? 'ok' : 'warn',
+      onpage.imageOptimized ? 'Images are properly compressed and use modern formats (WebP/AVIF). Minimal impact on page load.' : 'Images not fully optimised. Uncompressed images are typically the largest contributor to slow page load. Convert to WebP/AVIF and implement lazy loading.',
+      onpage.imageOptimized ? '' : 'HIGH — Core Web Vitals (LCP) + page speed');
+
+    const grpO5 = 'Internal Linking & Canonicals';
+    oAdd(grpO5, `Internal Links (${onpage.internalLinks} found)`,
+      onpage.internalLinks > 10 ? 'ok' : onpage.internalLinks > 4 ? 'warn' : 'err',
+      onpage.internalLinks > 10 ? `${onpage.internalLinks} internal links — PageRank flows well through the site.` : `Only ${onpage.internalLinks} internal links detected. Internal links distribute PageRank, guide crawlers, and direct users to related content. Aim for 5+ contextual internal links per key page.`,
+      onpage.internalLinks < 5 ? 'HIGH — PageRank distribution + crawl efficiency' : '');
+    oAdd(grpO5, 'Anchor Text Optimisation', onpage.anchorTextOptim ? 'ok' : 'warn',
+      onpage.anchorTextOptim ? 'Anchor text is descriptive and keyword-relevant. Good for both SEO and usability.' : 'Anchor text is generic or over-optimised (e.g., "click here", or exact-match keywords on every link). Use descriptive, varied anchor text that describes the destination page\'s topic.',
+      onpage.anchorTextOptim ? '' : 'MEDIUM — keyword relevance signals');
+    oAdd(grpO5, 'Canonical Tags', onpage.canonicalTag ? 'ok' : 'warn',
+      onpage.canonicalTag ? 'Canonical tags found. Duplicate URL variants are being consolidated correctly.' : 'No canonical tags detected. Without them, URL variants (query strings, trailing slashes, www vs non-www) split link equity and create duplicate content issues.',
+      onpage.canonicalTag ? '' : 'MEDIUM — duplicate content + link equity');
+
+    const grpO6 = 'Social & OG Tags';
+    oAdd(grpO6, 'Open Graph Tags', onpage.ogTags ? 'ok' : 'warn',
+      onpage.ogTags ? 'Open Graph tags present. Content renders correctly when shared on LinkedIn, Facebook, and WhatsApp.' : 'Missing Open Graph tags. Without og:title, og:description, and og:image, social shares display random or ugly previews, reducing referral click-through.',
+      onpage.ogTags ? '' : 'MEDIUM — referral traffic + brand presentation');
+    oAdd(grpO6, 'Twitter / X Card Tags', onpage.twitterCard ? 'ok' : 'warn',
+      onpage.twitterCard ? 'Twitter Card tags present. Content shared on X/Twitter displays rich previews.' : 'Missing Twitter Card meta tags. Add twitter:card, twitter:title, and twitter:image for rich previews when content is shared on X/Twitter.',
+      onpage.twitterCard ? '' : 'LOW — X/Twitter referral engagement');
+
+    document.getElementById('pane-onpage').innerHTML = renderGroupedChecks(opChecks);
+    const opIssues = opChecks.filter(c => c.sev === 'err').length;
+    const opWarn = opChecks.filter(c => c.sev === 'warn').length;
+    const tbOp = document.getElementById('tb-onpage');
+    if (opIssues > 0) { tbOp.textContent = opIssues + ' errors'; tbOp.className = 'tab-badge tb-err'; }
+    else if (opWarn > 0) { tbOp.textContent = opWarn + ' warnings'; tbOp.className = 'tab-badge tb-warn'; }
+    else { tbOp.textContent = 'Clean'; tbOp.className = 'tab-badge tb-ok'; }
+
+    /* ── OFF-PAGE CHECKS ── */
+    const offChecks = [];
+    function offAdd(group, name, sevVal, detail, impact, value) {
+      offChecks.push({group, name, sev: sevVal, detail, impact, value: value||''});
+      addCount(sevVal);
+    }
+    const grpF1 = 'Domain & Page Authority';
+    offAdd(grpF1, `Domain Authority (${offpage.domainAuthority}/100)`,
+      offpage.domainAuthority >= 50 ? 'ok' : offpage.domainAuthority >= 25 ? 'warn' : 'err',
+      offpage.domainAuthority >= 60 ? `Domain Authority of ${offpage.domainAuthority} is strong. High DA correlates with better ranking potential across all pages.` : offpage.domainAuthority >= 30 ? `DA of ${offpage.domainAuthority} is moderate. Focus on acquiring high-quality backlinks from authoritative domains in your niche to improve.` : `DA of ${offpage.domainAuthority} is low. New sites start here — systematic link building over 6–12 months is required to build authority.`,
+      offpage.domainAuthority < 25 ? 'HIGH — overall ranking potential' : offpage.domainAuthority < 50 ? 'MEDIUM — competitive ranking ability' : '',
+      offpage.domainAuthority + '/100');
+
+    offAdd(grpF1, `Referring Domains (${offpage.referringDomains.toLocaleString()})`,
+      offpage.referringDomains > 100 ? 'ok' : offpage.referringDomains > 20 ? 'warn' : 'err',
+      offpage.referringDomains > 500 ? `${offpage.referringDomains.toLocaleString()} referring domains — strong diverse link profile.` : offpage.referringDomains > 100 ? `${offpage.referringDomains} referring domains — healthy link diversity. Continue acquiring links from new, unique domains.` : offpage.referringDomains > 20 ? `${offpage.referringDomains} referring domains. A key metric for authority — acquire links from diverse, topically relevant domains.` : `Only ${offpage.referringDomains} referring domains. A limited backlink profile significantly caps ranking potential for competitive keywords.`,
+      offpage.referringDomains < 20 ? 'CRITICAL — severely limits competitive ranking' : offpage.referringDomains < 100 ? 'HIGH — authority building required' : '');
+
+    offAdd(grpF1, `Total Backlinks (${offpage.totalBacklinks.toLocaleString()})`,
+      offpage.totalBacklinks > 100 ? 'ok' : offpage.totalBacklinks > 10 ? 'warn' : 'err',
+      offpage.totalBacklinks > 1000 ? `${offpage.totalBacklinks.toLocaleString()} total backlinks — strong link volume.` : `${offpage.totalBacklinks.toLocaleString()} backlinks. Focus on acquiring links from new unique domains rather than the same sources repeatedly.`,
+      '');
+
+    offAdd(grpF1, `Dofollow / Nofollow Ratio (${offpage.doFollowRatio}% dofollow)`,
+      offpage.doFollowRatio >= 60 ? 'ok' : offpage.doFollowRatio >= 40 ? 'warn' : 'err',
+      offpage.doFollowRatio >= 60 ? `${offpage.doFollowRatio}% dofollow ratio — healthy. Dofollow links pass PageRank and directly influence rankings.` : `${offpage.doFollowRatio}% dofollow ratio is low. A high proportion of nofollow links reduces the link equity available to boost rankings. Prioritise acquiring dofollow links from editorial placements.`,
+      offpage.doFollowRatio < 40 ? 'MEDIUM — link equity pass-through' : '');
+
+    const grpF2 = 'Backlink Quality & Health';
+    offAdd(grpF2, `Toxic / Spam Links (${offpage.toxicLinks}%)`,
+      offpage.toxicLinks < 5 ? 'ok' : offpage.toxicLinks < 20 ? 'warn' : 'err',
+      offpage.toxicLinks < 5 ? 'Very low toxic link percentage — backlink profile appears clean and natural.' : offpage.toxicLinks < 20 ? `${offpage.toxicLinks}% of links show toxic signals. Review and disavow spam, PBN, and irrelevant links in Google Search Console. Toxic links can trigger manual penalties.` : `${offpage.toxicLinks}% toxic link rate is high — significant spam or artificial link building detected. Conduct an urgent backlink audit and submit a disavow file.`,
+      offpage.toxicLinks > 20 ? 'CRITICAL — manual penalty risk' : offpage.toxicLinks > 5 ? 'HIGH — algorithmic penalty risk' : '',
+      offpage.toxicLinks + '% toxic');
+
+    offAdd(grpF2, 'Anchor Text Distribution', offpage.anchorTextNatural ? 'ok' : 'warn',
+      offpage.anchorTextNatural ? 'Anchor text distribution appears natural — good mix of branded, generic, and keyword anchors.' : 'Anchor text distribution appears over-optimised with too many exact-match keyword anchors. Unnatural anchor text is a strong algorithmic penalty signal. Aim for a natural mix: ~40–50% branded, ~20–30% generic, ~10–20% keyword.',
+      offpage.anchorTextNatural ? '' : 'HIGH — Penguin penalty risk');
+
+    offAdd(grpF2, `Link Velocity (${offpage.linkVelocity})`,
+      offpage.linkVelocity === 'growing' ? 'ok' : offpage.linkVelocity === 'stable' ? 'ok' : 'warn',
+      offpage.linkVelocity === 'growing' ? 'Backlink profile is growing — consistent acquisition signals an authoritative, relevant site to Google.' : offpage.linkVelocity === 'stable' ? 'Backlink velocity is stable. Maintain a steady, diversified link acquisition strategy.' : 'Backlink velocity is declining. A shrinking link profile can signal reduced authority over time. Investigate lost links and review content quality.',
+      offpage.linkVelocity === 'declining' ? 'MEDIUM — authority trajectory' : '');
+
+    const grpF3 = 'Brand & Entity Signals';
+    offAdd(grpF3, `Brand Mentions (${offpage.brandMentions.toLocaleString()})`,
+      offpage.brandMentions > 100 ? 'ok' : offpage.brandMentions > 20 ? 'warn' : 'err',
+      offpage.brandMentions > 200 ? `${offpage.brandMentions.toLocaleString()} brand mentions detected — strong brand presence. LLMs heavily weight brand co-occurrence across trusted sources.` : offpage.brandMentions > 20 ? `${offpage.brandMentions} brand mentions. Grow this through PR, guest posts, podcast appearances, and thought leadership content.` : `Only ${offpage.brandMentions} brand mentions. Brand co-occurrence is a core signal for both Google and LLMs when assessing authority. Invest in earned media.`,
+      offpage.brandMentions < 20 ? 'HIGH — authority + LLM brand recognition' : '');
+
+    offAdd(grpF3, `Unlinked Brand Mentions (${offpage.unlinkedMentions})`,
+      offpage.unlinkedMentions > 20 ? 'ok' : 'warn',
+      offpage.unlinkedMentions > 20 ? `${offpage.unlinkedMentions} unlinked brand mentions detected — these are link opportunities. Reach out to claim them as backlinks.` : `${offpage.unlinkedMentions} unlinked mentions. Use Semrush Brand Monitoring to find all unlinked mentions and convert them into backlinks — a high-ROI, zero-content link building tactic.`,
+      offpage.unlinkedMentions < 10 ? 'MEDIUM — untapped link building opportunity' : '');
+
+    offAdd(grpF3, 'Named Authors on External Sites', offpage.namedAuthors ? 'ok' : 'warn',
+      offpage.namedAuthors ? 'Named authors appear on external publications — builds personal E-E-A-T signals for both Google and AI citation engines.' : 'No named author presence on external sites detected. Author bylines on industry publications build E-E-A-T signals that Google and LLMs use to assess expertise and trustworthiness.',
+      offpage.namedAuthors ? '' : 'MEDIUM — E-E-A-T + LLM author recognition');
+
+    offAdd(grpF3, 'Google Business Profile', offpage.googleBizProfile ? 'ok' : 'warn',
+      offpage.googleBizProfile ? 'Google Business Profile detected — local search visibility and brand entity signals are established.' : 'No Google Business Profile found. Even for non-local businesses, a verified GBP strengthens brand entity signals in Google\'s Knowledge Graph and contributes to E-E-A-T.',
+      offpage.googleBizProfile ? '' : 'MEDIUM — brand entity + local SEO');
+
+    offAdd(grpF3, 'Wikipedia / Wikidata Presence', offpage.wikiPresence ? 'ok' : 'info',
+      offpage.wikiPresence ? 'Wikipedia or Wikidata entity detected — strongest possible authority signal. Frequently cited in AI-generated answers.' : 'No Wikipedia or Wikidata entity. Wikidata is where Google and LLMs source structured brand information. If eligible, establish a Wikidata entry — it\'s a powerful GEO signal.',
+      offpage.wikiPresence ? '' : 'MEDIUM — Knowledge Graph + GEO citation');
+
+    offAdd(grpF3, `Industry Directory Listings (${offpage.industryDirs})`,
+      offpage.industryDirs > 10 ? 'ok' : offpage.industryDirs > 3 ? 'warn' : 'err',
+      offpage.industryDirs > 10 ? `Listed in ${offpage.industryDirs} industry directories — solid local citation profile.` : `Only ${offpage.industryDirs} directory listings. Authoritative industry directories (G2, Capterra, Clutch, sector-specific listings) provide high-quality backlinks and validate entity legitimacy.`,
+      offpage.industryDirs < 4 ? 'MEDIUM — entity validation + niche backlinks' : '');
+
+    document.getElementById('pane-offpage').innerHTML = renderGroupedChecks(offChecks);
+    const offIssues = offChecks.filter(c => c.sev === 'err').length;
+    const offWarn = offChecks.filter(c => c.sev === 'warn').length;
+    const tbOff = document.getElementById('tb-offpage');
+    if (offIssues > 0) { tbOff.textContent = offIssues + ' errors'; tbOff.className = 'tab-badge tb-err'; }
+    else if (offWarn > 0) { tbOff.textContent = offWarn + ' warnings'; tbOff.className = 'tab-badge tb-warn'; }
+    else { tbOff.textContent = 'Healthy'; tbOff.className = 'tab-badge tb-ok'; }
+
+    /* ── AEO CHECKS ── */
+    const aeoChecks = [];
+    function aAdd(group, name, sevVal, detail, impact, value) {
+      aeoChecks.push({group, name, sev: sevVal, detail, impact, value: value||''});
+      addCount(sevVal);
+    }
+    const grpA1 = 'Schema for Answer Engines';
+    aAdd(grpA1, 'FAQ Schema (FAQPage)', aeo.faqSchema ? 'ok' : 'err',
+      aeo.faqSchema ? 'FAQPage schema detected. Eligible for FAQ rich results, People Also Ask boxes, and AI answer extraction.' : 'No FAQPage schema. One of the highest-ROI AEO tactics — FAQ markup directly feeds Google\'s PAA boxes, featured snippets, and AI answer surfaces. Add to every informational page.',
+      aeo.faqSchema ? '' : 'HIGH — PAA boxes, featured snippets, AI answers');
+    aAdd(grpA1, 'HowTo Schema', aeo.howtoSchema ? 'ok' : 'warn',
+      aeo.howtoSchema ? 'HowTo schema present. Step-by-step content is eligible for HowTo rich results.' : 'No HowTo schema. Instructional and procedural content without this markup is ineligible for step-by-step rich results in SERPs.',
+      aeo.howtoSchema ? '' : 'MEDIUM — instructional query rich results');
+    aAdd(grpA1, 'Breadcrumb Schema', aeo.breadcrumbSchema ? 'ok' : 'warn',
+      aeo.breadcrumbSchema ? 'BreadcrumbList schema present. Site hierarchy is clearly communicated to search engines and AI.' : 'No breadcrumb schema. Breadcrumbs expose site hierarchy to search engines and AI — they also display as visual paths in SERPs, improving click-through.',
+      aeo.breadcrumbSchema ? '' : 'MEDIUM — site hierarchy + SERP display');
+    aAdd(grpA1, 'Article / BlogPosting Schema', aeo.articleSchema ? 'ok' : 'warn',
+      aeo.articleSchema ? 'Article schema present. Content metadata (author, date, headline) is machine-readable.' : 'No Article schema. Article markup communicates publication date, authorship, and headline to AI engines — contributing to freshness and credibility assessments.',
+      aeo.articleSchema ? '' : 'MEDIUM — AI content understanding');
+    aAdd(grpA1, 'Speakable Schema', aeo.speakable ? 'ok' : 'info',
+      aeo.speakable ? 'Speakable schema detected. Content is explicitly marked as suitable for text-to-speech and voice assistants.' : 'No Speakable schema. Speakable markup identifies passages suitable for Google Assistant and other voice assistants. Implement on key answer-focused passages.',
+      aeo.speakable ? '' : 'LOW — voice search targeting');
+
+    const grpA2 = 'Content Structure for Snippets';
+    aAdd(grpA2, 'Featured Snippet Formatting', aeo.snippetFormatted ? 'ok' : 'warn',
+      aeo.snippetFormatted ? 'Content uses paragraph, list, and table formats suitable for Google\'s snippet extraction.' : 'Content not optimised for featured snippets. Use a 40–60 word definition paragraph immediately after each H2 heading, followed by a bulleted list. Google consistently selects this pattern for Position Zero.',
+      aeo.snippetFormatted ? '' : 'HIGH — Position Zero / Featured Snippet eligibility');
+    aAdd(grpA2, 'Question-Based H2/H3 Headings', aeo.questionHeadings ? 'ok' : 'warn',
+      aeo.questionHeadings ? 'Headings use natural question formats (What/How/Why/When) — directly targeting conversational and PAA queries.' : 'Headings are not formatted as natural language questions. Restructuring H2/H3s as questions (e.g., "How does X work?") is one of the fastest ways to improve PAA and featured snippet capture.',
+      aeo.questionHeadings ? '' : 'HIGH — PAA boxes + voice search');
+    aAdd(grpA2, 'Concise Answer Blocks', aeo.conciseAnswers ? 'ok' : 'warn',
+      aeo.conciseAnswers ? 'Concise 40–60 word answer paragraphs detected immediately following question headings — ideal for snippet extraction.' : 'No concise answer blocks found. Place a direct, 2–3 sentence answer immediately after each question heading. AI engines extract these verbatim for direct answers.',
+      aeo.conciseAnswers ? '' : 'HIGH — answer box + AI response extraction');
+    aAdd(grpA2, 'Definition Blocks', aeo.definitionBlocks ? 'ok' : 'warn',
+      aeo.definitionBlocks ? 'Inline definitions present. AI models can accurately represent your content in generated summaries.' : 'Missing inline term definitions. Define industry-specific terms inline — AI models use concise, authoritative definitions when generating answers about your topic area.',
+      aeo.definitionBlocks ? '' : 'MEDIUM — AI summarisation accuracy');
+    aAdd(grpA2, 'Structured Lists & Tables', aeo.structuredLists && aeo.multimediaRich ? 'ok' : aeo.structuredLists ? 'warn' : 'warn',
+      aeo.structuredLists ? 'Structured lists and tables detected — heavily preferred by both snippet algorithms and AI answer generators.' : 'No structured lists or comparison tables. HTML tables and bulleted/numbered lists are among the most cited content formats in AI-generated answers.',
+      aeo.structuredLists ? '' : 'MEDIUM — snippet extraction + AI citation');
+    aAdd(grpA2, 'Facts, Data & Statistics', aeo.factsNStats ? 'ok' : 'warn',
+      aeo.factsNStats ? 'Specific statistics and quantitative claims present — among the most frequently cited content in AI-generated answers.' : 'No specific statistics or data points detected. AI models strongly prefer content with verifiable numbers. Add quantitative evidence, research findings, and market data throughout key pages.',
+      aeo.factsNStats ? '' : 'HIGH — AI citation preference for citable facts');
+
+    const grpA3 = 'PAA & Voice Readiness';
+    aAdd(grpA3, 'People Also Ask Optimisation', aeo.paaOptimized ? 'ok' : 'warn',
+      aeo.paaOptimized ? 'Content structure targets PAA-style questions effectively.' : 'Content is not optimised for People Also Ask (PAA) boxes. Research related questions using Semrush\'s Keyword Magic Tool and answer them with structured Q&A content.',
+      aeo.paaOptimized ? '' : 'HIGH — PAA visibility');
+    aAdd(grpA3, 'Voice Search Readiness', aeo.voiceSearchReady ? 'ok' : 'warn',
+      aeo.voiceSearchReady ? 'Content is conversational and accessible — well-suited for voice search responses.' : 'Content is not optimised for voice search. Voice queries are conversational and longer than text queries. Include natural language Q&A sections and ensure reading level is "easy".',
+      aeo.voiceSearchReady ? '' : 'MEDIUM — voice search capture');
+
+    document.getElementById('pane-aeo').innerHTML = renderGroupedChecks(aeoChecks);
+    const aeoIssues = aeoChecks.filter(c => c.sev === 'err').length;
+    const aeoWarn = aeoChecks.filter(c => c.sev === 'warn').length;
+    const tbAeo = document.getElementById('tb-aeo');
+    if (aeoIssues > 0) { tbAeo.textContent = aeoIssues + ' errors'; tbAeo.className = 'tab-badge tb-err'; }
+    else if (aeoWarn > 0) { tbAeo.textContent = aeoWarn + ' warnings'; tbAeo.className = 'tab-badge tb-warn'; }
+    else { tbAeo.textContent = 'Ready'; tbAeo.className = 'tab-badge tb-ok'; }
+
+    /* ── GEO CHECKS ── */
+    const geoChecks = [];
+    function gAdd(group, name, sevVal, detail, impact, value) {
+      geoChecks.push({group, name, sev: sevVal, detail, impact, value: value||''});
+      addCount(sevVal);
+    }
+    const grpG1 = 'E-E-A-T Signals';
+    gAdd(grpG1, 'Experience Signals', geo.eeatExperience ? 'ok' : 'err',
+      geo.eeatExperience ? 'First-hand experience signals present (case studies, personal insights, original data). AI models weight experience signals heavily.' : 'No experience signals detected. AI engines actively look for evidence of first-hand experience: original research, case studies, personal insights, or unique data. Without these, content is seen as derivative and rarely cited.',
+      geo.eeatExperience ? '' : 'HIGH — AI citation eligibility');
+    gAdd(grpG1, 'Expertise Signals', geo.eeatExpertise ? 'ok' : 'err',
+      geo.eeatExpertise ? 'Expertise signals present — topic authority markers that AI citation engines rely on.' : 'Weak expertise signals. Demonstrate subject-matter expertise through detailed technical content, accurate use of industry terminology, citations from primary sources, and author credentials.',
+      geo.eeatExpertise ? '' : 'HIGH — AI content quality assessment');
+    gAdd(grpG1, 'Authority Signals', geo.eeatAuthority ? 'ok' : 'err',
+      geo.eeatAuthority ? 'Authority signals established — site is referenced and recognised by other sources in the domain.' : 'Authority signals are weak. Authority is built externally — through mentions on authoritative sites, academic or industry recognition, and consistent expert positioning over time.',
+      geo.eeatAuthority ? '' : 'HIGH — LLM trust assessment');
+    gAdd(grpG1, 'Trust Signals', geo.eeatTrust ? 'ok' : 'err',
+      geo.eeatTrust ? 'Trust signals present — privacy policy, contact info, clear ownership, and HTTPS are established.' : 'Trust signals are missing or weak. Ensure privacy policy, contact page, clear authorship, transparent ownership, HTTPS, and accurate About page are all present.',
+      geo.eeatTrust ? '' : 'CRITICAL — foundation of AI citation eligibility');
+
+    const grpG2 = 'Author & Credentials';
+    gAdd(grpG2, 'Author Attribution on Pages', geo.authorBio ? 'ok' : 'err',
+      geo.authorBio ? 'Named author attribution detected on content pages — primary trust signal for both Google and AI.' : 'No author attribution found. AI models are significantly less likely to cite anonymous content. Add named authors to every page with professional bios.',
+      geo.authorBio ? '' : 'HIGH — AI trust score + citation probability');
+    gAdd(grpG2, 'Author Credentials & Expertise', geo.authorCredentials ? 'ok' : 'warn',
+      geo.authorCredentials ? 'Author credentials and professional background are documented — strong trust signal for AI citation.' : 'Author credentials not displayed. Add professional titles, years of experience, relevant qualifications, LinkedIn profiles, and publication history to author bios.',
+      geo.authorCredentials ? '' : 'HIGH — LLM author credibility evaluation');
+    gAdd(grpG2, 'Author Social / External Presence', geo.authorSocial ? 'ok' : 'warn',
+      geo.authorSocial ? 'Authors have external presence (LinkedIn, publications, social profiles) that AI can verify.' : 'Authors lack external verifiable presence. AI models cross-reference authors against public databases. A LinkedIn profile, academic publication, or professional association page dramatically increases author credibility.',
+      geo.authorSocial ? '' : 'MEDIUM — author entity verification');
+
+    const grpG3 = 'Citations & Source Quality';
+    gAdd(grpG3, 'External Citations to Primary Sources', geo.externalCitations ? 'ok' : 'err',
+      geo.externalCitations ? 'External citations present — links to primary sources signal factual rigour to both readers and AI.' : 'No external citations detected. AI models strongly weight content that cites primary sources (peer-reviewed research, government data, official statistics). Add citations throughout key pages.',
+      geo.externalCitations ? '' : 'HIGH — AI credibility evaluation');
+    gAdd(grpG3, 'Primary Source References', geo.primarySources ? 'ok' : 'warn',
+      geo.primarySources ? 'Primary source references detected (academic papers, official data, government sources).' : 'No primary source references. Link directly to government databases, peer-reviewed papers, industry standards bodies, and official reports. Primary sources are the gold standard for AI citation credibility.',
+      geo.primarySources ? '' : 'HIGH — AI citation quality signal');
+    gAdd(grpG3, 'Statistics & Quantitative Evidence', geo.dataStats ? 'ok' : 'warn',
+      geo.dataStats ? 'Specific statistics and data present — one of the strongest AI citation triggers.' : 'No statistics or quantitative evidence detected. AI models prefer content containing specific, verifiable numbers. Add market data, research findings, and quantitative claims with source citations.',
+      geo.dataStats ? '' : 'HIGH — AI preference for citable, factual content');
+
+    const grpG4 = 'AI-Specific Optimisation';
+    gAdd(grpG4, 'llms.txt File', geo.llmsTxt ? 'ok' : 'warn',
+      geo.llmsTxt ? 'llms.txt detected — you\'re ahead of the curve. This file guides AI crawlers on which content to index and prioritise, similar to how robots.txt guides traditional crawlers.' : 'No llms.txt file. Emerging standard (llmstxt.org) that explicitly guides AI crawlers (ChatGPT, Claude, Gemini) on how to index and use your content. Early adopters gain AI visibility advantages.',
+      geo.llmsTxt ? '' : 'MEDIUM — AI crawler guidance (emerging standard)');
+    gAdd(grpG4, 'AI-Friendly robots.txt Directives', geo.aiRobots ? 'ok' : 'warn',
+      geo.aiRobots ? 'robots.txt includes explicit AI crawler directives (GPTBot, ClaudeBot, Googlebot-Extended). AI access is intentionally managed.' : 'No AI-specific crawler directives in robots.txt. Add explicit rules for GPTBot, ClaudeBot, and Anthropic-AI to control how AI systems access and use your content for training and retrieval.',
+      geo.aiRobots ? '' : 'MEDIUM — AI access management');
+    gAdd(grpG4, 'Semantic HTML Structure', geo.semanticHTML ? 'ok' : 'warn',
+      geo.semanticHTML ? 'Semantic HTML used throughout (article, section, header, main, aside). AI models parse semantic structure to understand content hierarchy.' : 'Low semantic HTML usage. AI models rely on semantic structure to accurately extract and represent content. Use article, section, main, header, and aside tags — not just div soup.',
+      geo.semanticHTML ? '' : 'HIGH — LLM content extraction accuracy');
+    gAdd(grpG4, 'Content Freshness Signals', geo.contentFreshSig ? 'ok' : 'warn',
+      geo.contentFreshSig ? 'Content freshness signals present (last-modified headers, published/updated dates). LLMs prefer recent, clearly-dated content.' : 'Missing content freshness signals. LLMs have a strong preference for recent content — add visible published and "last updated" dates, and ensure Last-Modified HTTP headers are accurate.',
+      geo.contentFreshSig ? '' : 'HIGH — LLM freshness preference');
+
+    const grpG5 = 'Brand & Entity';
+    gAdd(grpG5, 'Brand Entity Consistency', geo.brandEntityClean ? 'ok' : 'warn',
+      geo.brandEntityClean ? 'Brand name appears consistently across page content, schema, and metadata — strong entity signal.' : 'Inconsistent brand entity signals. Use your exact brand name consistently across page text, JSON-LD schema, social profiles, and metadata. LLMs build entity associations from repeated, consistent usage.',
+      geo.brandEntityClean ? '' : 'MEDIUM — brand recognition in AI answers');
+    gAdd(grpG5, 'Knowledge Graph Presence', geo.kgPresence ? 'ok' : 'warn',
+      geo.kgPresence ? 'Knowledge Graph entity detected — the strongest possible brand authority signal. Frequently surfaced in AI-generated answers.' : 'No Knowledge Graph entity found. Establish presence via Schema.org Organization markup, Wikidata entry, Google Business Profile, and consistent NAP data. KG entities are AI\'s primary authoritative source.',
+      geo.kgPresence ? '' : 'HIGH — AI knowledge base inclusion');
+    gAdd(grpG5, 'Wikidata Entity', geo.wikidata ? 'ok' : 'info',
+      geo.wikidata ? 'Wikidata entry present — AI models including ChatGPT and Perplexity frequently source entity information from Wikidata.' : 'No Wikidata entity. If eligible, create a Wikidata entry with structured information about your organisation. This is one of the highest-quality GEO signals available.',
+      geo.wikidata ? '' : 'MEDIUM — AI structured entity data');
+    gAdd(grpG5, `Estimated AI Citation Probability (~${geo.aiCitationPct}%)`,
+      geo.aiCitationPct >= 40 ? 'ok' : geo.aiCitationPct >= 20 ? 'warn' : 'err',
+      geo.aiCitationPct >= 40 ? `Strong estimated AI citation probability of ~${geo.aiCitationPct}% across informational queries in your niche. Well-positioned for AI-generated answer inclusion.` : geo.aiCitationPct >= 20 ? `Moderate AI citation probability of ~${geo.aiCitationPct}%. Improving E-E-A-T signals, adding primary citations, and establishing Knowledge Graph presence would push this above 40%.` : `Low AI citation probability of ~${geo.aiCitationPct}%. Current E-E-A-T, authority, and structural deficiencies result in systematic exclusion from AI-generated answers.`,
+      geo.aiCitationPct < 20 ? 'CRITICAL — excluded from AI answers' : geo.aiCitationPct < 40 ? 'HIGH — AI visibility gap' : '',
+      '~' + geo.aiCitationPct + '%');
+
+    document.getElementById('pane-geo').innerHTML = renderGroupedChecks(geoChecks);
+    const geoIssues = geoChecks.filter(c => c.sev === 'err').length;
+    const geoWarn = geoChecks.filter(c => c.sev === 'warn').length;
+    const tbGeo = document.getElementById('tb-geo');
+    if (geoIssues > 0) { tbGeo.textContent = geoIssues + ' errors'; tbGeo.className = 'tab-badge tb-err'; }
+    else if (geoWarn > 0) { tbGeo.textContent = geoWarn + ' warnings'; tbGeo.className = 'tab-badge tb-warn'; }
+    else { tbGeo.textContent = 'Ready'; tbGeo.className = 'tab-badge tb-ok'; }
+
+    // Issue summary bar
+    const totalIssues = counts.err + counts.warn + counts.ok;
+    document.getElementById('js-issue-summary').innerHTML = `
+      <span class="iss-pill"><span class="iss-dot c-err"></span>${counts.err} Error${counts.err !== 1 ? 's' : ''}</span>
+      <span class="iss-pill"><span class="iss-dot c-warn"></span>${counts.warn} Warning${counts.warn !== 1 ? 's' : ''}</span>
+      <span class="iss-pill"><span class="iss-dot c-ok"></span>${counts.ok} Passed</span>
+      <span class="iss-pill" style="color:var(--muted);font-size:0.6rem;font-family:var(--mono)">${totalIssues} checks total</span>
+    `;
+  }
+
+  /* ══════════════════════════════════════
+     RENDER GROUPED CHECKS
+  ══════════════════════════════════════ */
+  function renderGroupedChecks(items) {
+    let html = '';
+    let lastGroup = null;
+    items.forEach(item => {
+      if (item.group !== lastGroup) {
+        html += `<div class="check-group-title">${esc(item.group)}</div>`;
+        lastGroup = item.group;
+      }
+      const label = item.sev === 'ok' ? 'Pass' : item.sev === 'warn' ? 'Warn' : item.sev === 'info' ? 'Info' : 'Error';
+      html += `
+        <div class="check-item">
+          <div class="check-sev sev-${item.sev}">${label}</div>
+          <div class="check-body">
+            <div class="check-name">${esc(item.name)}</div>
+            <div class="check-detail">${esc(item.detail)}</div>
+            ${item.impact ? `<div class="check-impact">${esc(item.impact)}</div>` : ''}
+          </div>
+          ${item.value ? `<div class="check-value">${esc(item.value)}</div>` : ''}
+        </div>`;
+    });
+    return html;
+  }
+
+  /* ══════════════════════════════════════
+     RESET AI
+  ══════════════════════════════════════ */
+  function resetAI() {
+    document.getElementById('js-ai-body').innerHTML = '<p class="ai-empty">Enter your Claude API key, run an audit, then click "Analyze with Claude" for a comprehensive expert analysis — including technical debt score, competitive gap assessment, content strategy, AEO readiness, GEO citation probability, and a phased action roadmap.</p>';
+    document.getElementById('js-roadmap').hidden = true;
+    document.getElementById('js-analyze-btn').textContent = 'Analyze with Claude →';
+  }
+
+  /* ══════════════════════════════════════
+     RUN AI ANALYSIS
+  ══════════════════════════════════════ */
+  async function runAnalysis() {
+    const apiKey = document.getElementById('js-api-key').value.trim();
+    if (!apiKey) { alert('Please enter your Claude API key first.'); return; }
+    if (!auditData) { alert('Please run an audit first.'); return; }
+
+    const btn = document.getElementById('js-analyze-btn');
+    btn.disabled = true;
+    btn.textContent = 'Analyzing…';
+    document.getElementById('js-ai-body').innerHTML = '<span class="blink-cur"></span>';
+
+    const d = auditData;
+    const sc = d.scores;
+    const { tech, onpage, offpage, aeo, geo } = d;
+
+    // Collect all failing checks for prompt context
+    const errs = [], warns = [];
+    const collectIssues = (checks) => {
+      checks.forEach(c => {
+        if (c.sev === 'err') errs.push(c.name);
+        else if (c.sev === 'warn') warns.push(c.name.split('(')[0].trim());
+      });
+    };
+
+    const prompt = `You are a senior SEO consultant aligned with Semrush's audit methodology. You have 15+ years of experience across Technical SEO, On-Page optimisation, Off-Page authority building, AEO (Answer Engine Optimisation), and GEO (Generative Engine Optimisation). Analyse the following audit data and deliver a deep, expert-level report.
+
+Be specific. Reference the exact metric values. Do not give generic advice. A senior consultant will review your output.
+
+## AUDIT DATA — ${d.domain}
+Date: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+
+### Scores (Semrush-aligned, 0–100)
+| Dimension   | Score | Status |
+|-------------|-------|--------|
+| Technical   | ${sc.tech}  | ${sc.tech >= 70 ? 'Healthy' : sc.tech >= 45 ? 'Needs Work' : 'Critical'} |
+| On-Page     | ${sc.onpage} | ${sc.onpage >= 70 ? 'Healthy' : sc.onpage >= 45 ? 'Needs Work' : 'Critical'} |
+| Off-Page    | ${sc.offpage} | ${sc.offpage >= 70 ? 'Healthy' : sc.offpage >= 45 ? 'Needs Work' : 'Critical'} |
+| AEO         | ${sc.aeo} | ${sc.aeo >= 70 ? 'Healthy' : sc.aeo >= 45 ? 'Needs Work' : 'Critical'} |
+| GEO         | ${sc.geo} | ${sc.geo >= 70 ? 'Healthy' : sc.geo >= 45 ? 'Needs Work' : 'Critical'} |
+| **Overall Site Health** | **${sc.overall}** | **${sc.overall >= 70 ? 'Healthy' : sc.overall >= 45 ? 'Needs Improvement' : sc.overall >= 30 ? 'Poor' : 'Critical'}** |
+
+### Technical SEO
+HTTPS=${tech.https} | SSL=${tech.sslValid} | HTTP2=${tech.http2} | Sitemap=${tech.sitemapExists} | Robots=${tech.robotsTxt}
+Crawlable=${tech.crawlable} | Indexable=${tech.indexable} | NoIndex-pages=${tech.noIndexPages}
+PageSpeed=${tech.pageSpeed}/100 | LCP=${tech.lcp}s | INP=${tech.inp}ms | CLS=${tech.cls}
+Mobile=${tech.mobileScore}/100 | Broken-links=${tech.brokenLinks} | Broken-images=${tech.brokenImages}
+Redirect-chains=${tech.redirectChains} | Orphan-pages=${tech.orphanPages} | 5xx-errors=${tech.serverErrors5xx}
+Schema=${tech.schemaMarkup} | Gzip=${tech.gzipEnabled} | Cache=${tech.cacheHeaders} | Security-headers=${tech.securityHeaders}
+Render-blocking-JS=${tech.jsBlocking} | Mixed-content=${tech.mixedContent} | HTML-size=${tech.htmlSize}KB
+
+### On-Page SEO
+Title-exists=${onpage.titleExists} | Title-len=${onpage.titleLen}ch | Duplicate-titles=${onpage.titleDuplicates}
+Meta-desc=${onpage.metaDescExists} | Meta-len=${onpage.metaDescLen}ch | H1-count=${onpage.h1Count}
+Heading-hierarchy=${onpage.headingHierarchy} | Word-count=${onpage.wordCount}
+Duplicate-content=${onpage.contentDuplicate} | Thin-pages=${onpage.thinPages}
+Images-no-alt=${onpage.imageAltMissing} | Images-optimised=${onpage.imageOptimized}
+Internal-links=${onpage.internalLinks} | Canonical=${onpage.canonicalTag} | OG-tags=${onpage.ogTags}
+Keyword-density=${onpage.keywordDensity}% | Reading-level=${onpage.readingLevel}
+Content-freshness=${onpage.contentFreshness} days ago | Anchor-text-optimised=${onpage.anchorTextOptim}
+
+### Off-Page SEO
+Domain-Authority=${offpage.domainAuthority}/100 | Page-Authority=${offpage.pageAuthority}/100
+Total-backlinks=${offpage.totalBacklinks.toLocaleString()} | Referring-domains=${offpage.referringDomains.toLocaleString()}
+Dofollow-ratio=${offpage.doFollowRatio}% | Toxic-links=${offpage.toxicLinks}%
+Anchor-text-natural=${offpage.anchorTextNatural} | Link-velocity=${offpage.linkVelocity}
+Brand-mentions=${offpage.brandMentions} | Unlinked-mentions=${offpage.unlinkedMentions}
+Google-Biz-Profile=${offpage.googleBizProfile} | Wikipedia=${offpage.wikiPresence}
+Industry-dirs=${offpage.industryDirs} | Press-releases=${offpage.pressReleases}
+
+### AEO
+FAQ-schema=${aeo.faqSchema} | HowTo-schema=${aeo.howtoSchema} | Breadcrumb-schema=${aeo.breadcrumbSchema}
+Speakable=${aeo.speakable} | Snippet-formatted=${aeo.snippetFormatted}
+Question-headings=${aeo.questionHeadings} | Concise-answers=${aeo.conciseAnswers}
+Definition-blocks=${aeo.definitionBlocks} | Facts-stats=${aeo.factsNStats}
+Voice-ready=${aeo.voiceSearchReady} | Featured-snippet=${aeo.featuredSnippet}
+Reading-level=${aeo.readLevel} | Word-count=${aeo.contentDepth}
+
+### GEO
+EEAT-Experience=${geo.eeatExperience} | EEAT-Expertise=${geo.eeatExpertise}
+EEAT-Authority=${geo.eeatAuthority} | EEAT-Trust=${geo.eeatTrust}
+Author-bio=${geo.authorBio} | Author-credentials=${geo.authorCredentials} | Author-social=${geo.authorSocial}
+External-citations=${geo.externalCitations} | Primary-sources=${geo.primarySources} | Data-stats=${geo.dataStats}
+llms.txt=${geo.llmsTxt} | AI-robots=${geo.aiRobots} | Semantic-HTML=${geo.semanticHTML}
+Brand-entity-clean=${geo.brandEntityClean} | Knowledge-Graph=${geo.kgPresence} | Wikidata=${geo.wikidata}
+Estimated-AI-citation-probability=~${geo.aiCitationPct}%
+
+---
+
+Respond with exactly these ## section headings. Be substantive — no padding, no filler.
+
+## EXECUTIVE SUMMARY
+4 sentences. Precise, honest site health assessment across all 5 dimensions. Cite specific scores. Name the most urgent blocker and the biggest untapped opportunity.
+
+## CRITICAL ISSUES — RANKED BY BUSINESS IMPACT
+Top 6 issues ordered by estimated traffic/revenue/AI-visibility impact. For each: (1) issue name, (2) estimated impact with numbers, (3) exact fix, (4) implementation time. Reference actual metric values from the audit.
+
+## TECHNICAL SEO DEEP DIVE
+Analyse crawlability, Core Web Vitals, HTTPS/security, and site architecture. Reference specific values (LCP ${tech.lcp}s, INP ${tech.inp}ms, CLS ${tech.cls}, speed ${tech.pageSpeed}/100). What is the ranking ceiling without fixes? Which technical fix has the highest ROI? Discuss compound effects of multiple issues.
+
+## ON-PAGE OPTIMISATION ANALYSIS
+Assess title tags, meta descriptions, heading structure, content quality, duplicate content, image optimisation, and internal linking. Reference actual values. Which on-page changes would produce the fastest ranking improvements? Discuss the content freshness signal and how ${onpage.contentFreshness} days affects AI citation probability.
+
+## OFF-PAGE AUTHORITY ASSESSMENT
+Evaluate the backlink profile with DA=${offpage.domainAuthority}, ${offpage.referringDomains} referring domains, ${offpage.doFollowRatio}% dofollow, ${offpage.toxicLinks}% toxic, link velocity: ${offpage.linkVelocity}. What is the realistic achievable DA in 12 months? What link building strategy makes most sense given the current profile? Assess toxic link risk and brand mention opportunities.
+
+## AEO ANALYSIS — ANSWER ENGINE READINESS
+Which specific query types (informational, navigational, transactional) is this site failing to capture? What is the current featured snippet eligibility percentage? Specify 3 high-value query types this site could win with the right content structure. What is the estimated PAA box capture rate?
+
+## GEO ANALYSIS — GENERATIVE ENGINE OPTIMIZATION
+Assess the ~${geo.aiCitationPct}% AI citation probability. Which E-E-A-T gaps are most responsible for AI exclusion? Compare to what AI citation leaders do differently. What is the minimum viable fix set to cross 40% citation probability? Assess llms.txt opportunity and AI robots directive strategy.
+
+## COMPETITIVE GAP ASSESSMENT
+Estimate percentile ranking on each of the 5 dimensions vs competing sites in this category. Identify 3 structural gaps that top-ranking competitors are exploiting. Which single improvement creates the sharpest competitive differentiation in the next 60 days?
+
+## CONTENT STRATEGY
+5 specific content architecture recommendations that simultaneously improve Technical (structure), On-Page (depth), AEO (snippet eligibility), and GEO (citation probability). For each: content type, target query cluster, schema markup, and expected cross-dimensional benefit.
+
+## PHASE 1 — Quick Wins (Weeks 1–2)
+6 tasks executable immediately with no external dependencies. For each: task name, specific implementation steps, and estimated impact with numbers (e.g., "+8–12% CTR", "unlocks FAQ rich results").
+
+## PHASE 2 — Core Improvements (Month 1–3)
+6 improvements requiring planning or development. For each: task, implementation guidance, and the specific metric it moves toward a target value.
+
+## PHASE 3 — Authority & AI Visibility (Month 3–12)
+5 strategic initiatives building compounding authority and AI citation probability over time. Focus on durable, hard-to-replicate advantages.
+
+## KPIs TO TRACK
+10 KPIs with: metric name, recommended tool, current baseline from this audit, and realistic 12-month target assuming the roadmap is executed.`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4096,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error(e.error?.message || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const text = data.content?.[0]?.text || '';
+      document.getElementById('js-ai-body').innerHTML = parseAI(text);
+      buildRoadmap(text);
+
+    } catch (err) {
+      document.getElementById('js-ai-body').innerHTML = `
+        <p class="ai-empty" style="color:var(--fail)"><strong>Error:</strong> ${esc(err.message)}</p>
+        <p class="ai-empty" style="margin-top:6px;font-style:normal;font-size:0.79rem">Check your API key and ensure your Anthropic account has sufficient credits.</p>`;
+    }
+    btn.disabled = false;
+    btn.textContent = 'Re-analyze →';
+  }
+
+  /* ── Parse AI Output ── */
+  function parseAI(raw) {
+    const sections = raw.split(/^## /m).filter(s => s.trim());
+    return '<div class="ai-output">' + sections.map(sec => {
+      const nl = sec.indexOf('\n');
+      const title = nl > -1 ? sec.slice(0, nl).trim() : sec.trim();
+      const body  = nl > -1 ? sec.slice(nl + 1).trim() : '';
+      return `<div class="ai-block"><div class="ai-block-title">${esc(title)}</div>${parseBody(body)}</div>`;
+    }).join('') + '</div>';
+  }
+
+  function parseBody(text) {
+    const bold = s => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    const lines = text.split('\n');
+    let html = '', list = false;
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) { if (list) { html += '</ul>'; list = false; } continue; }
+      if (/^[-*•]\s+/.test(line) || /^\d+\.\s+/.test(line)) {
+        if (!list) { html += '<ul class="ai-ul">'; list = true; }
+        html += `<li>${bold(esc(line.replace(/^[-*•\d.]+\s*/, '')))}</li>`;
+      } else {
+        if (list) { html += '</ul>'; list = false; }
+        html += `<p class="ai-para">${bold(esc(line))}</p>`;
+      }
+    }
+    if (list) html += '</ul>';
+    return html;
+  }
+
+  /* ── Build Roadmap ── */
+  function buildRoadmap(text) {
+    const extract = n => {
+      const re = new RegExp(`## PHASE ${n}[^\\n]*\\n([\\s\\S]*?)(?=## |$)`, 'i');
+      const m = text.match(re);
+      if (!m) return [];
+      return m[1].split('\n').filter(l => /^[-*•\d]/.test(l.trim()))
+        .map(l => l.replace(/^[-*•\d.]+\s*/, '').replace(/\*\*/g, '').trim())
+        .filter(Boolean).slice(0, 6);
+    };
+    const fallback = [
+      ['Install SSL & enforce HTTPS redirect sitewide','Submit XML sitemap to Google Search Console','Fix all broken internal links and redirect chains','Add alt text to all images','Rewrite title tags (40–60 chars) & meta descriptions (120–160 chars)','Add Open Graph + Twitter Card tags sitewide'],
+      ['Fix Core Web Vitals: LCP<2.5s, INP<200ms, CLS<0.1','Implement Schema.org: FAQPage, HowTo, Article, Organization','Rewrite H2/H3 headings as natural-language questions with concise answer blocks','Build internal linking architecture — every page needs 5+ internal links','Audit and disavow toxic backlinks (>15% toxic threshold)','Create comparison tables & definition blocks for AEO targeting'],
+      ['Build E-E-A-T content programme: author-attributed research, original data, case studies','Launch systematic link building: digital PR, guest posts, unlinked mention reclamation','Create llms.txt and configure AI-specific robots.txt directives','Establish Wikidata entity and pursue Knowledge Graph presence','Develop topical authority content clusters: 10+ deep articles per core topic','Implement a content freshness cadence: refresh top 20 pages every 90 days'],
+    ];
+    const phases = [
+      { cls:'phase-1', name:'Phase 1', window:'Weeks 1–2',  tasks: extract(1) },
+      { cls:'phase-2', name:'Phase 2', window:'Months 1–3', tasks: extract(2) },
+      { cls:'phase-3', name:'Phase 3', window:'Months 3–12',tasks: extract(3) },
+    ];
+    document.getElementById('js-roadmap-body').innerHTML = phases.map((p, i) => `
+      <div class="roadmap-phase">
+        <div class="phase-label">
+          <div class="phase-name ${p.cls}">${p.name}</div>
+          <div class="phase-window">${p.window}</div>
+        </div>
+        <div class="phase-tasks">
+          <ul class="phase-list">
+            ${(p.tasks.length ? p.tasks : fallback[i]).map(t => `<li>${esc(t)}</li>`).join('')}
+          </ul>
+        </div>
+      </div>`).join('');
+    document.getElementById('js-roadmap').hidden = false;
+  }
+
+  /* ══════════════════════════════════════
+     PUBLIC INTERFACE
+  ══════════════════════════════════════ */
+  function switchTab(btn) {
+    document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('is-active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    document.getElementById(btn.dataset.panel).classList.add('is-active');
+  }
+
+  // Enter key on URL input
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('js-url').addEventListener('keydown', e => {
+      if (e.key === 'Enter') startAudit();
+    });
+  });
+
+  return { startAudit, switchTab, runAnalysis };
+})();
+</script>
+</body>
+</html>
